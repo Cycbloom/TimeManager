@@ -1,9 +1,9 @@
-import KnowledgeGraph from "../components/KnowledgeGraph/KnowledgeGraph";
+import NoteLists from "../components/NoteLists/NoteLists";
 
 const Home = () => {
   return (
     <div>
-      <KnowledgeGraph />
+      <NoteLists />
     </div>
   );
 };
