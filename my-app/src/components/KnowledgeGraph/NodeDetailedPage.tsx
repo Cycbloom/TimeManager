@@ -1,8 +1,8 @@
 import { Box, Modal, Typography } from "@mui/material";
-import { NodeProps } from "./NodeProps";
+import { NodeData } from "./NodeProps";
 
 interface Props {
-  node: NodeProps;
+  node: NodeData;
   open: boolean;
   onClose: () => void;
 }
@@ -25,7 +25,7 @@ const NodeDetailedPage = ({ node, open, onClose }: Props) => {
       >
         <Typography variant="h4">{node.title}</Typography>
         <Typography variant="body1">{node.content}</Typography>
-        <Typography variant="body2">{node.Tags.join(", ")}</Typography>
+        <Typography variant="body2">{node.tags.join(", ")}</Typography>
       </Box>
     </Modal>
   );
