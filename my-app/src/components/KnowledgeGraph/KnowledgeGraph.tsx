@@ -25,7 +25,7 @@ const initialNodes: NodeProps[] = [
     id: "1",
     position: { x: 0, y: 0 },
     data: {
-      label: "1",
+      label: "Node 1",
     },
     type: "custom",
     nodeData: {
@@ -38,7 +38,7 @@ const initialNodes: NodeProps[] = [
     id: "2",
     position: { x: 100, y: 100 },
     data: {
-      label: "2",
+      label: "Node 2",
     },
     nodeData: {
       title: "Node 2",
