@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
+import CircleIcon from "@mui/icons-material/Circle";
 
 interface Props {
   label: string;
@@ -7,9 +8,14 @@ interface Props {
 
 const NodeButton = ({ label, onClick }: Props) => {
   return (
-    <Button variant="contained" color="primary" onClick={onClick}>
-      {label}
-    </Button>
+    <>
+      <IconButton onClick={onClick} style={{ marginRight: "16px" }}>
+        <CircleIcon fontSize="large" />
+        <Typography variant="caption" display="block" gutterBottom>
+          {label}
+        </Typography>
+      </IconButton>
+    </>
   );
 };
 
