@@ -1,7 +1,3 @@
-import TaskForm from "../components/TaskForm";
-
-const Home = () => {
-  return <TaskForm />;
-};
+const Home = () => {};
 
 export default Home;
