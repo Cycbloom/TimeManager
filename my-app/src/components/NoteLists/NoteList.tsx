@@ -19,8 +19,8 @@ const NoteList = ({ notes }: Props) => {
   return (
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
       {notes.map((note, index) => (
-        <div>
-          <ListItem key={index}>
+        <div key={note.id}>
+          <ListItem>
             <ListItemText primary={note.title} secondary={note.content} />
           </ListItem>
           {index < notes.length - 1 && <Divider component="li" />}
