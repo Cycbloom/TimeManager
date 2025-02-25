@@ -4,14 +4,17 @@ import {
   ListItemText,
   Typography,
   Divider,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Note } from "../../hooks/useNote";
 
 interface Props {
   notes: Note[];
+  onDelete: (noteId: number) => void;
 }
 
-const NoteList = ({ notes }: Props) => {
+const NoteList = ({ notes, onDelete }: Props) => {
   if (notes.length === 0) {
     return <Typography>No notes available.</Typography>;
   }
@@ -20,7 +23,17 @@ const NoteList = ({ notes }: Props) => {
     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
       {notes.map((note, index) => (
         <div key={note.id}>
-          <ListItem>
+          <ListItem
+            secondaryAction={
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => onDelete(note.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            }
+          >
             <ListItemText primary={note.title} secondary={note.content} />
           </ListItem>
           {index < notes.length - 1 && <Divider component="li" />}

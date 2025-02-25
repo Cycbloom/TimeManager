@@ -7,7 +7,11 @@ interface FetchResponse<T> {
   results: T[];
 }
 
-const useData = <T>(
+interface IdEntity {
+  id: number;
+}
+
+const useData = <T extends IdEntity>(
   endpoint: string,
   requestConfig?: AxiosRequestConfig,
   deps?: any[]
@@ -63,6 +67,20 @@ const useData = <T>(
       });
   };
 
-  return { data, error, loading, postData };
+  const deleteData = (id: number) => {
+    setLoading(true);
+    apiClient
+      .delete(`${endpoint}/${id}`, requestConfig)
+      .then(() => {
+        setData(data.filter((item) => item.id !== id));
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  };
+
+  return { data, error, loading, postData, deleteData };
 };
 export default useData;
