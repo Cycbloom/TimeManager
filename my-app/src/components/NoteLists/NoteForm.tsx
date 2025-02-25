@@ -21,6 +21,7 @@ const NoteForm = ({ onAddNote }: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
@@ -44,6 +45,7 @@ const NoteForm = ({ onAddNote }: Props) => {
           variant="outlined"
           fullWidth
           {...register("title")}
+          value={watch("title") || ""}
           error={!!errors.title}
           helperText={errors.title?.message}
           sx={{
@@ -58,6 +60,7 @@ const NoteForm = ({ onAddNote }: Props) => {
           label="New Note"
           variant="outlined"
           {...register("content")}
+          value={watch("content") || ""}
           error={!!errors.content}
           helperText={errors.content?.message}
           fullWidth
