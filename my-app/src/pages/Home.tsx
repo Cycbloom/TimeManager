@@ -1,11 +1,9 @@
-import NoteForm from "../components/NoteLists/NoteForm";
-import NoteLists from "../components/NoteLists/NoteLists";
-import { Note } from "../hooks/useNote";
+import NotePage from "../components/NoteLists/NotesPage";
 
 const Home = () => {
   return (
     <div>
-      <NoteLists />
+      <NotePage />
     </div>
   );
 };

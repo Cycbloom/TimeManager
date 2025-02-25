@@ -48,6 +48,7 @@ const NoteForm = ({ onAddNote }: Props) => {
           value={watch("title") || ""}
           error={!!errors.title}
           helperText={errors.title?.message}
+          margin="normal"
           sx={{
             "& .MuiFormHelperText-root": {
               color: "red",

@@ -1,14 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Container,
-  TextField,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  Divider,
-} from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import axios from "axios";
 import useNote from "../../hooks/useNote";
 
@@ -18,8 +9,9 @@ export interface NoteQuery {
 
 import { Note } from "../../hooks/useNote";
 import NoteForm from "./NoteForm";
+import NoteList from "./NoteList";
 
-const NoteLists = () => {
+const NotePage = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [error, setError] = useState("");
   const { data: notesData, error: noteError } = useNote();
@@ -50,21 +42,9 @@ const NoteLists = () => {
     <Container>
       <NoteForm onAddNote={handleAddNote} />
       {error && <Typography color="error">{error}</Typography>}
-      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-        {notes.map((note, index) => (
-          <>
-            <ListItem key={index}>
-              <ListItemText
-                primary={note.title}
-                secondary={note.content}
-              ></ListItemText>
-            </ListItem>
-            <Divider component="li" />
-          </>
-        ))}
-      </List>
+      <NoteList notes={notes} />
     </Container>
   );
 };
 
-export default NoteLists;
+export default NotePage;
