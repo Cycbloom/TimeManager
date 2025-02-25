@@ -43,6 +43,26 @@ const useData = <T>(
     deps ? [...deps] : []
   );
 
-  return { data, error, loading };
+  const postData = (postData: T) => {
+    setLoading(true);
+    apiClient
+      .post<T>(
+        endpoint,
+        {
+          content: postData, //TODO: change this
+        },
+        requestConfig
+      )
+      .then((response) => {
+        setData([...data, response.data]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  };
+
+  return { data, error, loading, postData };
 };
 export default useData;
