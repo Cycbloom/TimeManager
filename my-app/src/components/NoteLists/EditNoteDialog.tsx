@@ -1,30 +1,35 @@
+import { Dialog, Box } from "@mui/material";
+import EditNoteForm from "./EditNoteForm";
 import { Note } from "../../hooks/useNote";
-import BaseNoteForm from "./BaseNoteForm";
-import { FormData } from "./BaseNoteForm";
 
 interface Props {
+  open: boolean;
   note: Note;
-  onUpdateNote: (data: Note) => void;
+  onUpdateNote: (note: Note) => void;
   onClose: () => void;
 }
 
-const EditNoteForm = ({ note, onUpdateNote, onClose }: Props) => {
-  const onSubmit = (data: FormData) => {
-    onUpdateNote({
-      id: note.id, // 保留原始 ID
-      ...data,
-    });
-    onClose(); // 关闭编辑窗口
-  };
-
+const EditNoteDialog = ({ open, note, onUpdateNote, onClose }: Props) => {
   return (
-    <BaseNoteForm
-      onSubmit={onSubmit}
-      defaultValues={{ title: note.title, content: note.content }}
-      submitButtonText="Save"
-      formTitle="Edit Note"
-    />
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      sx={{
+        borderRadius: "10px",
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
+      }}
+    >
+      <Box sx={{ margin: "0.5rem 1rem" }}>
+        <EditNoteForm
+          note={note}
+          onUpdateNote={onUpdateNote}
+          onClose={onClose}
+        />
+      </Box>
+    </Dialog>
   );
 };
 
-export default EditNoteForm;
+export default EditNoteDialog;
