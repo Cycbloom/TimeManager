@@ -50,13 +50,7 @@ const useData = <T extends IdEntity>(
   const postData = (postData: T) => {
     setLoading(true);
     apiClient
-      .post<T>(
-        endpoint,
-        {
-          content: postData, //TODO: change this
-        },
-        requestConfig
-      )
+      .post<T>(endpoint, { ...postData }, requestConfig)
       .then((response) => {
         setData([...data, response.data]);
         setLoading(false);
