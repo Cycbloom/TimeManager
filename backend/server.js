@@ -11,50 +11,157 @@ app.use(bodyParser.json());
 
 // 获取所有笔记
 app.get("/api/notes", (req, res) => {
-  db.all("SELECT * FROM notes", (err, rows) => {
+  const sql = `
+    SELECT notes.*, 
+           GROUP_CONCAT(DISTINCT tags.name) AS tags,
+           GROUP_CONCAT(DISTINCT categories.path) AS categories
+    FROM notes
+    LEFT JOIN note_tags ON notes.id = note_tags.note_id
+    LEFT JOIN tags ON note_tags.tag_id = tags.id
+    LEFT JOIN note_categories ON notes.id = note_categories.note_id
+    LEFT JOIN categories ON note_categories.category_id = categories.id
+    GROUP BY notes.id
+  `;
+
+  db.all(sql, (err, rows) => {
     if (err) {
       console.error("Error fetching notes:", err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
+
+    // 格式化结果
+    const results = rows.map((row) => ({
+      ...row,
+      tags: row.tags ? row.tags.split(",") : [],
+      categories: row.categories ? row.categories.split(",") : [],
+    }));
+
     res.json({
-      count: rows.length,
-      results: rows,
+      count: results.length,
+      results,
     });
+  });
+});
+
+app.get("/api/notes/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = `
+    SELECT notes.*, 
+           GROUP_CONCAT(DISTINCT tags.name) AS tags,
+           GROUP_CONCAT(DISTINCT categories.path) AS categories
+    FROM notes
+    LEFT JOIN note_tags ON notes.id = note_tags.note_id
+    LEFT JOIN tags ON note_tags.tag_id = tags.id
+    LEFT JOIN note_categories ON notes.id = note_categories.note_id
+    LEFT JOIN categories ON note_categories.category_id = categories.id
+    WHERE notes.id = ?
+    GROUP BY notes.id
+  `;
+
+  db.get(sql, [id], (err, row) => {
+    if (err) {
+      console.error("Error fetching note:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    if (!row) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+
+    // 格式化结果
+    const result = {
+      ...row,
+      tags: row.tags ? row.tags.split(",") : [],
+      categories: row.categories ? row.categories.split(",") : [],
+    };
+
+    res.json(result);
   });
 });
 
 // 创建笔记
 app.post("/api/notes", (req, res) => {
-  const { title, content } = req.body;
+  const {
+    title,
+    content,
+    type = "article",
+    tags = [],
+    categories = [],
+  } = req.body;
 
   if (!content) {
     return res.status(400).json({ error: "Note content is required" });
   }
 
-  const sql = `INSERT INTO notes (title, content) VALUES (?, ?)`;
-  const params = [title || "Untitled", content];
+  const sql = `
+    INSERT INTO notes (title, content, type, created_at, updated_at)
+    VALUES (?, ?, ?, datetime('now'), datetime('now'))
+  `;
+  const params = [title || "Untitled", content, type];
 
   db.run(sql, params, function (err) {
     if (err) {
       console.error("Error creating note:", err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-    const newNote = { id: this.lastID, title, content };
-    res.status(201).json(newNote);
+
+    const noteId = this.lastID;
+
+    // 处理标签
+    if (tags.length > 0) {
+      const tagQuery = `
+        INSERT INTO tags (name) VALUES (?)
+        ON CONFLICT(name) DO UPDATE SET count = count + 1
+        RETURNING id
+      `;
+      const tagNoteQuery = `INSERT INTO note_tags (note_id, tag_id) VALUES (?, ?)`;
+
+      tags.forEach((tag) => {
+        db.get(tagQuery, [tag], (err, row) => {
+          if (err) return console.error("Error processing tag:", err);
+          db.run(tagNoteQuery, [noteId, row.id]);
+        });
+      });
+    }
+
+    // 处理分类
+    if (categories.length > 0) {
+      const categoryQuery = `
+        SELECT id FROM categories WHERE path IN (${categories
+          .map(() => "?")
+          .join(",")})
+      `;
+      const insertCategoryQuery = `INSERT INTO note_categories (note_id, category_id) VALUES (?, ?)`;
+
+      db.all(categoryQuery, categories, (err, rows) => {
+        if (err) return console.error("Error processing categories:", err);
+        rows.forEach((row) => {
+          db.run(insertCategoryQuery, [noteId, row.id]);
+        });
+      });
+    }
+
+    // 返回新笔记
+    res
+      .status(201)
+      .json({ id: noteId, title, content, type, tags, categories });
   });
 });
 
 // 更新笔记
 app.put("/api/notes/:id", (req, res) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title, content, type, tags, categories } = req.body;
 
   if (!content) {
     return res.status(400).json({ error: "Note content is required" });
   }
 
-  const sql = `UPDATE notes SET title = ?, content = ? WHERE id = ?`;
-  const params = [title || "Untitled", content, id];
+  const sql = `
+    UPDATE notes 
+    SET title = ?, content = ?, type = ?, updated_at = datetime('now')
+    WHERE id = ?
+  `;
+  const params = [title || "Untitled", content, type, id];
 
   db.run(sql, params, function (err) {
     if (err) {
@@ -64,9 +171,12 @@ app.put("/api/notes/:id", (req, res) => {
     if (this.changes === 0) {
       return res.status(404).json({ error: "Note not found" });
     }
-    res.status(200).json({ id: Number(id), title, content });
+
+    //TODO: 更新标签和分类
+    res.status(200).json({ id: Number(id), title, content, type });
   });
 });
+
 // 删除笔记
 app.delete("/api/notes/:id", (req, res) => {
   const { id } = req.params;
@@ -81,6 +191,32 @@ app.delete("/api/notes/:id", (req, res) => {
       return res.status(404).json({ error: "Note not found" });
     }
     res.status(204).send();
+  });
+});
+
+// 获取所有分类
+app.get("/api/categories", (req, res) => {
+  const sql = `SELECT * FROM categories`;
+
+  db.all(sql, (err, rows) => {
+    if (err) {
+      console.error("Error fetching categories:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.json(rows);
+  });
+});
+
+// 获取所有标签
+app.get("/api/tags", (req, res) => {
+  const sql = `SELECT * FROM tags`;
+
+  db.all(sql, (err, rows) => {
+    if (err) {
+      console.error("Error fetching tags:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.json(rows);
   });
 });
 
