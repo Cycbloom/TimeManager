@@ -14,12 +14,13 @@ const NotePage = () => {
     error: noteError,
     postData: addNote,
     deleteData: deleteNote,
+    updateData: updateNote,
   } = useNote();
   return (
     <Container>
       <NoteForm onAddNote={addNote} />
       {noteError && <Typography color="error">{noteError}</Typography>}
-      <NoteList notes={notesData} onDelete={deleteNote} />
+      <NoteList notes={notesData} onDelete={deleteNote} onUpdate={updateNote} />
     </Container>
   );
 };

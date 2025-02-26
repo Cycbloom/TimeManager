@@ -75,6 +75,29 @@ const useData = <T extends IdEntity>(
       });
   };
 
-  return { data, error, loading, postData, deleteData };
+  const updateData = (updatedData: T) => {
+    setLoading(true);
+    apiClient
+      .put<T>(
+        `${endpoint}/${updatedData.id}`,
+        { ...updatedData },
+        requestConfig
+      )
+      .then(() => {
+        const updatedIndex = data.findIndex(
+          (item) => item.id === updatedData.id
+        );
+        const newData = [...data];
+        newData[updatedIndex] = updatedData;
+        setData(newData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  };
+
+  return { data, error, loading, postData, deleteData, updateData };
 };
 export default useData;

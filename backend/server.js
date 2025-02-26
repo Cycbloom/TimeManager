@@ -44,6 +44,29 @@ app.post("/api/notes", (req, res) => {
   });
 });
 
+// 更新笔记
+app.put("/api/notes/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  if (!content) {
+    return res.status(400).json({ error: "Note content is required" });
+  }
+
+  const sql = `UPDATE notes SET title = ?, content = ? WHERE id = ?`;
+  const params = [title || "Untitled", content, id];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      console.error("Error updating note:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+    res.status(200).json({ id: Number(id), title, content });
+  });
+});
 // 删除笔记
 app.delete("/api/notes/:id", (req, res) => {
   const { id } = req.params;
