@@ -17,9 +17,9 @@ interface Props {
   formTitle: string;
 }
 
-const NoteForm = ({
+const BaseNoteForm = ({
   onSubmit,
-  defaultValues,
+  defaultValues = { title: "", content: "" }, // 默认值
   submitButtonText,
   formTitle,
 }: Props) => {
@@ -28,13 +28,19 @@ const NoteForm = ({
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues,
   });
 
+  const handleFormSubmit: SubmitHandler<FormData> = (data) => {
+    onSubmit(data);
+    reset(); // 提交后清空表单
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       {formTitle && (
         <Typography variant="h4" gutterBottom>
           {formTitle}
@@ -86,4 +92,4 @@ const NoteForm = ({
   );
 };
 
-export default NoteForm;
+export default BaseNoteForm;
