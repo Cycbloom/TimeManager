@@ -6,6 +6,7 @@ import {
   Divider,
   IconButton,
   Dialog,
+  Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -71,12 +72,23 @@ const NoteList = ({ notes, onDelete, onUpdate }: Props) => {
         ))}
       </List>
       {editingNote && (
-        <Dialog open={!!editingNote} onClose={handleClose}>
-          <EditNoteForm
-            note={editingNote}
-            onUpdateNote={handleUpdate}
-            onClose={handleClose}
-          />
+        <Dialog
+          open={!!editingNote}
+          onClose={handleClose}
+          maxWidth="sm" // 设置为中等宽度
+          fullWidth // 使用全宽
+          sx={{
+            borderRadius: "10px",
+            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
+          }}
+        >
+          <Box sx={{ margin: "0.5rem 1rem" }}>
+            <EditNoteForm
+              note={editingNote}
+              onUpdateNote={handleUpdate}
+              onClose={handleClose}
+            />
+          </Box>
         </Dialog>
       )}
     </>
