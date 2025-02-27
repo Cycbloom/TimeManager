@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Note } from "../../hooks/useNote";
 import NoteItem from "./NoteItem";
 import EditNoteDialog from "./EditNoteDialog";
+import NoteSelector from "./NoteSelector";
 
 interface Props {
   notes: Note[];
@@ -32,6 +33,7 @@ const NoteList = ({ notes, onDelete, onUpdate }: Props) => {
 
   return (
     <>
+      <NoteSelector />
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         {notes.map((note, index) => (
           <div key={note.id}>
