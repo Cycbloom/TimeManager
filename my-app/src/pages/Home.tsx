@@ -1,9 +1,9 @@
-import NotePage from "../components/NoteLists/NotesPage";
+import NotePageContainer from "../components/NoteLists/NotePageContainer";
 
 const Home = () => {
   return (
     <div>
-      <NotePage />
+      <NotePageContainer />
     </div>
   );
 };

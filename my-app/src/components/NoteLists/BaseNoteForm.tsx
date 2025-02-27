@@ -14,10 +14,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 
+// 定义 type 的枚举
+const typeEnum = z.enum(["article", "problem", "solution", "reference"]);
+// 导出 type 的类型
+export type NoteType = z.infer<typeof typeEnum>;
+export const typeOptions = typeEnum.options;
+
 const schema = z.object({
   title: z.string().nonempty("Title is required"),
   content: z.string().nonempty("Content is required"),
-  type: z.enum(["article", "problem", "solution", "reference"]),
+  type: typeEnum,
   tags: z.array(z.string()),
 });
 

@@ -2,8 +2,10 @@ const { query, formatNote } = require("../utils");
 const db = require("../db");
 
 // 获取所有笔记
+// 获取所有笔记（支持过滤）
 function getAllNotes(req, res) {
-  const sql = `
+  const { queryType, queryTags } = req.query;
+  let sql = `
     SELECT notes.*, 
            GROUP_CONCAT(DISTINCT tags.name) AS tags,
            GROUP_CONCAT(DISTINCT categories.path) AS categories
@@ -12,12 +14,35 @@ function getAllNotes(req, res) {
     LEFT JOIN tags ON note_tags.tag_id = tags.id
     LEFT JOIN note_categories ON notes.id = note_categories.note_id
     LEFT JOIN categories ON note_categories.category_id = categories.id
-    GROUP BY notes.id
   `;
 
-  query(sql, [], (err, rows) => {
-    if (err) return res.status(500).json({ error: "Internal Server Error" });
-    const results = rows.map(formatNote);
+  const params = [];
+
+  // 添加 WHERE 条件
+  const conditions = [];
+  if (queryType) {
+    conditions.push("notes.type = ?");
+    params.push(queryType);
+  }
+
+  if (queryTags && queryTags.length > 0) {
+    const tagPlaceholders = queryTags.map(() => "?").join(",");
+    conditions.push(`tags.id IN (${tagPlaceholders})`);
+    params.push(...queryTags);
+  }
+
+  if (conditions.length > 0) {
+    sql += ` WHERE ${conditions.join(" AND ")}`;
+  }
+
+  sql += " GROUP BY notes.id"; // 确保分组在最后
+
+  query(sql, params, (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    const results = rows.map((row) => formatNote(row));
     res.json({ count: results.length, results });
   });
 }

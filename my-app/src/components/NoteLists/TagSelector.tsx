@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Autocomplete,
   TextField,
@@ -8,11 +8,9 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
+import { NoteFilterContext } from "./NoteFilterContext";
 
-interface Tag {
-  id: number;
-  name: string;
-}
+import { Tag } from "./NoteFilterContext";
 
 // 模拟从数据库获取标签数据（仅包含 id 和 name）
 const fetchTagsFromDatabase = async () => {
@@ -28,12 +26,12 @@ const fetchTagsFromDatabase = async () => {
   });
 };
 
-function LabelSelector() {
+function TagSelector() {
   // 标签选项
   const [tagOptions, setTagOptions] = useState<Tag[]>([]);
 
   // 选择的标签
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const { selectedTags, setSelectedTags } = useContext(NoteFilterContext);
 
   // 加载标签数据
   useEffect(() => {
@@ -45,10 +43,7 @@ function LabelSelector() {
   }, []);
 
   return (
-    <Paper
-      elevation={3}
-      sx={{ padding: 3, maxWidth: 400, backgroundColor: "#f9f9f9" }}
-    >
+    <>
       {/* 标签筛选 */}
       <FormControl component="fieldset" fullWidth>
         <FormLabel
@@ -81,12 +76,12 @@ function LabelSelector() {
       </FormControl>
 
       {/* 调试信息 */}
-      <Typography variant="caption" sx={{ display: "block", marginTop: 2 }}>
+      {/* <Typography variant="caption" sx={{ display: "block", marginTop: 2 }}>
         当前选中的标签：
         <strong>{selectedTags.map((tag) => tag.name).join(", ")}</strong>
-      </Typography>
-    </Paper>
+      </Typography> */}
+    </>
   );
 }
 
-export default LabelSelector;
+export default TagSelector;

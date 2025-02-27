@@ -1,10 +1,10 @@
 import { List, Typography, Divider } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Note } from "../../hooks/useNote";
 import NoteItem from "./NoteItem";
 import EditNoteDialog from "./EditNoteDialog";
 import NoteSelector from "./NoteSelector";
-import LabelSelector from "./LableSelector";
+import { NoteFilterContext } from "./NoteFilterContext";
 
 interface Props {
   notes: Note[];
@@ -29,12 +29,17 @@ const NoteList = ({ notes, onDelete, onUpdate }: Props) => {
   };
 
   if (notes.length === 0) {
-    return <Typography>No notes available.</Typography>;
+    return (
+      <>
+        <NoteSelector />
+        <Typography>No notes available.</Typography>
+      </>
+    );
   }
 
   return (
     <>
-      <LabelSelector />
+      <NoteSelector />
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         {notes.map((note, index) => (
           <div key={note.id}>
