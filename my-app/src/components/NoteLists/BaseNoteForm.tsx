@@ -1,4 +1,13 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -6,6 +15,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 const schema = z.object({
   title: z.string().nonempty("Title is required"),
   content: z.string().nonempty("Content is required"),
+  type: z.enum(["article", "problem", "solution", "reference"]),
 });
 
 export type FormData = z.infer<typeof schema>;
@@ -79,6 +89,22 @@ const BaseNoteForm = ({
             },
           }}
         />
+      </Box>
+      <Box>
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Type</InputLabel>
+          <Select
+            label="Type"
+            {...register("type")}
+            value={watch("type")}
+            error={!!errors.type}
+          >
+            <MenuItem value="article">Article</MenuItem>
+            <MenuItem value="problem">Problem</MenuItem>
+            <MenuItem value="solution">Solution</MenuItem>
+            <MenuItem value="reference">Reference</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
       <Button
         variant="contained"

@@ -20,7 +20,7 @@ const EditNoteForm = ({ note, onUpdateNote, onClose }: Props) => {
   return (
     <BaseNoteForm
       onSubmit={onSubmit}
-      defaultValues={{ title: note.title, content: note.content }}
+      defaultValues={note}
       submitButtonText="Save"
       formTitle="Edit Note"
     />
