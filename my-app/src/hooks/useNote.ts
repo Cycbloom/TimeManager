@@ -1,10 +1,8 @@
 import useData from "./useData";
 import { Note } from "@mui/icons-material";
-
-export interface Note {
+import { FormData } from "../components/NoteLists/BaseNoteForm";
+export interface Note extends FormData {
   id: number;
-  title: string;
-  content: string;
 }
 
 const useNote = () => useData<Note>("/api/notes");

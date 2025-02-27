@@ -110,7 +110,7 @@ app.post("/api/notes", (req, res) => {
     if (tags.length > 0) {
       const tagQuery = `
         INSERT INTO tags (name) VALUES (?)
-        ON CONFLICT(name) DO UPDATE SET count = count + 1
+        ON CONFLICT(name) DO NOTHING
         RETURNING id
       `;
       const tagNoteQuery = `INSERT INTO note_tags (note_id, tag_id) VALUES (?, ?)`;
@@ -118,7 +118,13 @@ app.post("/api/notes", (req, res) => {
       tags.forEach((tag) => {
         db.get(tagQuery, [tag], (err, row) => {
           if (err) return console.error("Error processing tag:", err);
-          db.run(tagNoteQuery, [noteId, row.id]);
+          db.run(tagNoteQuery, [noteId, row.id], (err) => {
+            if (err)
+              return console.error(
+                "Error inserting note-tag association:",
+                err
+              );
+          });
         });
       });
     }
@@ -172,10 +178,50 @@ app.put("/api/notes/:id", (req, res) => {
       return res.status(404).json({ error: "Note not found" });
     }
 
-    //TODO: 更新标签和分类
-    res.status(200).json({ id: Number(id), title, content, type });
+    // 更新标签
+    updateTagsForNote(id, tags, (err) => {
+      if (err) {
+        return res.status(500).json({ error: "Error updating tags" });
+      }
+      res.status(200).json({ id: Number(id), title, content, type, tags });
+    });
   });
 });
+
+// 辅助函数：更新笔记的标签
+function updateTagsForNote(noteId, tags, callback) {
+  db.serialize(() => {
+    // 1. 删除旧的标签关联
+    db.run(`DELETE FROM note_tags WHERE note_id = ?`, [noteId], (err) => {
+      if (err) return callback(err);
+
+      // 2. 插入新的标签关联
+      if (tags && tags.length > 0) {
+        const insertTagSql = `
+          INSERT OR IGNORE INTO tags (name) VALUES (?)
+        `;
+        const insertNoteTagSql = `
+          INSERT OR IGNORE INTO note_tags (note_id, tag_id)
+          VALUES (?, (SELECT id FROM tags WHERE name = ?))
+        `;
+
+        tags.forEach((tag) => {
+          // 插入标签（如果不存在）
+          db.run(insertTagSql, [tag], (err) => {
+            if (err) return callback(err);
+
+            // 插入笔记和标签的关联
+            db.run(insertNoteTagSql, [noteId, tag], (err) => {
+              if (err) return callback(err);
+            });
+          });
+        });
+      }
+
+      callback(null); // 成功
+    });
+  });
+}
 
 // 删除笔记
 app.delete("/api/notes/:id", (req, res) => {

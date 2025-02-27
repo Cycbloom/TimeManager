@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Chip,
   FormControl,
   InputLabel,
   MenuItem,
@@ -11,11 +12,13 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useState } from "react";
 
 const schema = z.object({
   title: z.string().nonempty("Title is required"),
   content: z.string().nonempty("Content is required"),
   type: z.enum(["article", "problem", "solution", "reference"]),
+  tags: z.array(z.string()),
 });
 
 export type FormData = z.infer<typeof schema>;
@@ -29,7 +32,7 @@ interface Props {
 
 const BaseNoteForm = ({
   onSubmit,
-  defaultValues = { title: "", content: "" }, // 默认值
+  defaultValues = { title: "", content: "", type: "article", tags: [] },
   submitButtonText,
   formTitle,
 }: Props) => {
@@ -43,6 +46,8 @@ const BaseNoteForm = ({
     resolver: zodResolver(schema),
     defaultValues,
   });
+
+  const [tagsInput, setTagsInput] = useState("");
 
   const handleFormSubmit: SubmitHandler<FormData> = (data) => {
     onSubmit(data);
@@ -105,6 +110,38 @@ const BaseNoteForm = ({
             <MenuItem value="reference">Reference</MenuItem>
           </Select>
         </FormControl>
+      </Box>
+      <Box>
+        <TextField
+          label="Tags"
+          variant="outlined"
+          fullWidth
+          error={!!errors.tags}
+          helperText={errors.tags?.message}
+          value={tagsInput}
+          onChange={(e) => setTagsInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              const newTags = [...watch("tags"), tagsInput];
+              reset({ ...watch(), tags: newTags });
+              setTagsInput("");
+            }
+          }}
+          margin="normal"
+        />
+        <Box>
+          {watch("tags").map((tag, index) => (
+            <Chip
+              key={index}
+              label={tag}
+              onDelete={() => {
+                const newTags = watch("tags").filter((_, i) => i !== index);
+                reset({ ...watch(), tags: newTags });
+              }}
+            />
+          ))}
+        </Box>
       </Box>
       <Button
         variant="contained"

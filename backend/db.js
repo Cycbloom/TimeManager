@@ -55,8 +55,7 @@ db.serialize(() => {
     `
       CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT UNIQUE NOT NULL,
-        count INTEGER DEFAULT 0
+        name TEXT UNIQUE NOT NULL
       )
     `,
     (err) => {
