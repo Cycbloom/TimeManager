@@ -1,5 +1,12 @@
 // 导入必要的组件
-import { FormControl, FormLabel, Autocomplete, TextField } from "@mui/material";
+import {
+  FormControl,
+  FormLabel,
+  Select,
+  MenuItem,
+  InputLabel,
+  SelectChangeEvent,
+} from "@mui/material";
 import { useContext } from "react";
 import { NoteFilterContext } from "./NoteFilterContext";
 
@@ -12,12 +19,12 @@ const TypeSelector = () => {
   const { selectedType, setSelectedType } = useContext(NoteFilterContext);
 
   // 处理类型选择变化
-  const handleTypeChange = (
-    _event: React.ChangeEvent<{}>,
-    newValue: NoteType | null
-  ) => {
-    setSelectedType(newValue);
+  const handleTypeChange = (event: SelectChangeEvent<NoteType>) => {
+    setSelectedType(event.target.value as NoteType);
   };
+
+  // 添加清空选项
+  const optionsWithClear = ["", ...typeOptions];
 
   return (
     <>
@@ -28,21 +35,23 @@ const TypeSelector = () => {
         >
           按类型筛选
         </FormLabel>
-        <Autocomplete
-          options={typeOptions}
-          getOptionLabel={(option) => option}
-          value={selectedType}
-          onChange={handleTypeChange}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              placeholder="请选择类型"
-            />
-          )}
-        />
+        <FormControl fullWidth variant="outlined">
+          <InputLabel id="type-select-label">Type</InputLabel>
+          <Select
+            labelId="type-select-label"
+            value={selectedType || ""}
+            onChange={handleTypeChange}
+            label="Type"
+          >
+            {optionsWithClear.map((option) => (
+              <MenuItem key={option || "clear"} value={option}>
+                {option === "" ? "all" : option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </FormControl>
-      {/* <Typography>当前选中的类型: {selectedType?.label}</Typography> */}
+      {/* <Typography>当前选中的类型: {selectedType}</Typography> */}
     </>
   );
 };
