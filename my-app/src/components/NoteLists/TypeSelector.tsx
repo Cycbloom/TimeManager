@@ -21,8 +21,11 @@ const TypeSelector = () => {
 
   return (
     <>
-      <FormControl component="fieldset" fullWidth sx={{ marginBottom: 3 }}>
-        <FormLabel component="legend" sx={{ fontWeight: "bold" }}>
+      <FormControl component="fieldset" fullWidth>
+        <FormLabel
+          component="legend"
+          sx={{ fontWeight: "bold", marginBottom: 1 }}
+        >
           按类型筛选
         </FormLabel>
         <Autocomplete

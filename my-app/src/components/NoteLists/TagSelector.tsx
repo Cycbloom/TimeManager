@@ -23,7 +23,7 @@ function TagSelector() {
       <FormControl component="fieldset" fullWidth>
         <FormLabel
           component="legend"
-          sx={{ fontWeight: "bold", marginBottom: 2 }}
+          sx={{ fontWeight: "bold", marginBottom: 1 }}
         >
           按标签筛选
         </FormLabel>
@@ -32,7 +32,7 @@ function TagSelector() {
           options={tagOptions}
           getOptionLabel={(option) => option.name} // 显示标签的名字
           value={selectedTags}
-          onChange={(event, newValue) => {
+          onChange={(_event, newValue) => {
             setSelectedTags(newValue); // 更新选中的标签
           }}
           renderInput={(params) => (
