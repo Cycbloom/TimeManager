@@ -62,7 +62,7 @@ const BaseNoteForm = ({
     const tagsChanged =
       JSON.stringify(data.tags) !== JSON.stringify(defaultValues.tags);
     if (tagsChanged) setTagsDirty(true);
-    reset(); // 提交后清空表单
+    reset(defaultValues);
   };
 
   return (
