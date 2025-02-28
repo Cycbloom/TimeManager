@@ -24,7 +24,7 @@ const TypeSelector = () => {
   };
 
   // 添加清空选项
-  const optionsWithClear = ["", ...typeOptions];
+  const optionsWithAll = ["", ...typeOptions];
 
   return (
     <>
@@ -43,8 +43,8 @@ const TypeSelector = () => {
             onChange={handleTypeChange}
             label="Type"
           >
-            {optionsWithClear.map((option) => (
-              <MenuItem key={option || "clear"} value={option}>
+            {optionsWithAll.map((option) => (
+              <MenuItem key={option || "all"} value={option}>
                 {option === "" ? "all" : option}
               </MenuItem>
             ))}
