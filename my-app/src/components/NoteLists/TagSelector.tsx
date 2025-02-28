@@ -11,11 +11,11 @@ import { NoteFilterContext } from "./NoteFilterContext";
 import useTags from "../../hooks/useTags";
 
 function TagSelector() {
-  // 标签选项
-  const { data: tagOptions } = useTags();
-
   // 选择的标签
-  const { selectedTags, setSelectedTags } = useContext(NoteFilterContext);
+  const { selectedTags, setSelectedTags, tagsDirty, setTagsDirty } =
+    useContext(NoteFilterContext);
+  // 标签选项
+  const { data: tagOptions } = useTags(tagsDirty, setTagsDirty);
 
   return (
     <>
@@ -43,9 +43,10 @@ function TagSelector() {
             />
           )}
           renderTags={(value, getTagProps) =>
-            value.map((option, index) => (
-              <Chip label={option.name} {...getTagProps({ index })} />
-            ))
+            value.map((option, index) => {
+              const { key, ...otherProps } = getTagProps({ index }); // 提取 key 和其他属性
+              return <Chip key={key} label={option.name} {...otherProps} />;
+            })
           }
         />
       </FormControl>

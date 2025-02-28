@@ -12,7 +12,8 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { NoteFilterContext } from "./NoteFilterContext";
 
 // 定义 type 的枚举
 const typeEnum = z.enum(["article", "problem", "solution", "reference"]);
@@ -54,9 +55,13 @@ const BaseNoteForm = ({
   });
 
   const [tagsInput, setTagsInput] = useState("");
+  const { setTagsDirty } = useContext(NoteFilterContext);
 
   const handleFormSubmit: SubmitHandler<FormData> = (data) => {
     onSubmit(data);
+    const tagsChanged =
+      JSON.stringify(data.tags) !== JSON.stringify(defaultValues.tags);
+    if (tagsChanged) setTagsDirty(true);
     reset(); // 提交后清空表单
   };
 

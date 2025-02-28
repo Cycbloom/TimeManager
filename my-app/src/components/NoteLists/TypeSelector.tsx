@@ -13,7 +13,7 @@ const TypeSelector = () => {
 
   // 处理类型选择变化
   const handleTypeChange = (
-    event: React.ChangeEvent<{}>,
+    _event: React.ChangeEvent<{}>,
     newValue: NoteType | null
   ) => {
     setSelectedType(newValue);
