@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const noteController = require("./controllers/noteController");
+const tagsController = require("./controllers/tagsController");
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.get("/api/notes/:id", noteController.getNoteById);
 app.post("/api/notes", noteController.createNote);
 app.put("/api/notes/:id", noteController.updateNote);
 app.delete("/api/notes/:id", noteController.deleteNote);
+
+app.get("/api/tags", tagsController.getAllTags);
 
 // 启动服务器
 const PORT = 5000;

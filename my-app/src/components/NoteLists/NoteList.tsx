@@ -1,10 +1,9 @@
 import { List, Typography, Divider } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Note } from "../../hooks/useNote";
 import NoteItem from "./NoteItem";
 import EditNoteDialog from "./EditNoteDialog";
 import NoteSelector from "./NoteSelector";
-import { NoteFilterContext } from "./NoteFilterContext";
 
 interface Props {
   notes: Note[];

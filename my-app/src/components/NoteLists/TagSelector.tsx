@@ -1,46 +1,21 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import {
   Autocomplete,
   TextField,
   Chip,
-  Paper,
-  Typography,
   FormControl,
   FormLabel,
 } from "@mui/material";
 import { NoteFilterContext } from "./NoteFilterContext";
 
-import { Tag } from "./NoteFilterContext";
-
-// 模拟从数据库获取标签数据（仅包含 id 和 name）
-const fetchTagsFromDatabase = async () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        { id: 1, name: "工作" },
-        { id: 2, name: "学习" },
-        { id: 3, name: "生活" },
-        { id: 4, name: "旅行" },
-      ]);
-    }, 1000); // 模拟异步请求
-  });
-};
+import useTags from "../../hooks/useTags";
 
 function TagSelector() {
   // 标签选项
-  const [tagOptions, setTagOptions] = useState<Tag[]>([]);
+  const { data: tagOptions } = useTags();
 
   // 选择的标签
   const { selectedTags, setSelectedTags } = useContext(NoteFilterContext);
-
-  // 加载标签数据
-  useEffect(() => {
-    const loadTags = async () => {
-      const tags = (await fetchTagsFromDatabase()) as Tag[];
-      setTagOptions(tags);
-    };
-    loadTags();
-  }, []);
 
   return (
     <>
