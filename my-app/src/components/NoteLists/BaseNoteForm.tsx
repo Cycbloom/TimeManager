@@ -61,7 +61,7 @@ const BaseNoteForm = ({
     onSubmit(data);
     const tagsChanged =
       JSON.stringify(data.tags) !== JSON.stringify(defaultValues.tags);
-    if (tagsChanged) setTagsDirty(true);
+    if (tagsChanged) setTagsDirty();
     reset(defaultValues);
   };
 
