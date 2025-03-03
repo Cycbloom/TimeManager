@@ -98,6 +98,13 @@ const useData = <T extends IdEntity>(
       });
   };
 
-  return { data, error, loading, postData, deleteData, updateData };
+  return {
+    data,
+    error,
+    loading,
+    postData,
+    deleteData,
+    updateData,
+  };
 };
 export default useData;

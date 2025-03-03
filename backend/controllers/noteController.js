@@ -7,13 +7,10 @@ function getAllNotes(req, res) {
   const { queryType, queryTags } = req.query;
   let sql = `
     SELECT notes.*, 
-           GROUP_CONCAT(DISTINCT tags.name) AS tags,
-           GROUP_CONCAT(DISTINCT categories.path) AS categories
+           GROUP_CONCAT(DISTINCT tags.name) AS tags
     FROM notes
     LEFT JOIN note_tags ON notes.id = note_tags.note_id
     LEFT JOIN tags ON note_tags.tag_id = tags.id
-    LEFT JOIN note_categories ON notes.id = note_categories.note_id
-    LEFT JOIN categories ON note_categories.category_id = categories.id
   `;
 
   const params = [];
@@ -52,13 +49,10 @@ function getNoteById(req, res) {
   const { id } = req.params;
   const sql = `
     SELECT notes.*, 
-           GROUP_CONCAT(DISTINCT tags.name) AS tags,
-           GROUP_CONCAT(DISTINCT categories.path) AS categories
+           GROUP_CONCAT(DISTINCT tags.name) AS tags
     FROM notes
     LEFT JOIN note_tags ON notes.id = note_tags.note_id
     LEFT JOIN tags ON note_tags.tag_id = tags.id
-    LEFT JOIN note_categories ON notes.id = note_categories.note_id
-    LEFT JOIN categories ON note_categories.category_id = categories.id
     WHERE notes.id = ?
     GROUP BY notes.id
   `;
@@ -132,6 +126,10 @@ function updateNote(req, res) {
 // 删除笔记
 function deleteNote(req, res) {
   const { id } = req.params;
+  db.run("PRAGMA foreign_keys = ON;", (err) => {
+    if (err) console.error("Error enabling foreign key support:", err);
+  });
+
   const sql = `DELETE FROM notes WHERE id = ?`;
 
   db.run(sql, [id], function (err) {
@@ -144,9 +142,14 @@ function deleteNote(req, res) {
 
 function updateTagsForNote(noteId, tags, callback) {
   db.serialize(() => {
+    db.run("BEGIN TRANSACTION");
+
     // 1. 删除旧的标签关联
     db.run(`DELETE FROM note_tags WHERE note_id = ?`, [noteId], (err) => {
-      if (err) return callback(err);
+      if (err) {
+        db.run("ROLLBACK");
+        return callback(err);
+      }
 
       // 2. 插入新的标签关联
       if (tags && tags.length > 0) {
@@ -156,37 +159,29 @@ function updateTagsForNote(noteId, tags, callback) {
           VALUES (?, (SELECT id FROM tags WHERE name = ?))
         `;
 
-        tags.forEach((tag) => {
+        tags.forEach((tag, index) => {
           db.run(insertTagSql, [tag], (err) => {
-            if (err) return callback(err);
+            if (err) {
+              db.run("ROLLBACK");
+              return callback(err);
+            }
             db.run(insertNoteTagSql, [noteId, tag], (err) => {
-              if (err) return callback(err);
+              if (err) {
+                db.run("ROLLBACK");
+                return callback(err);
+              }
+              if (index === tags.length - 1) {
+                db.run("COMMIT", callback);
+              }
             });
           });
         });
+      } else {
+        db.run("COMMIT", callback);
       }
-      callback(null); // 成功
     });
   });
 }
-
-// function updateCategoriesForNote(noteId, categories, callback) {
-//   db.serialize(() => {
-//     db.run(`DELETE FROM note_categories WHERE note_id = ?`, [noteId], (err) => {
-//       if (err) return callback(err);
-//       if (categories && categories.length > 0) {
-//         const insertCategorySql = `
-//             INSERT INTO note_categories (note_id, category_id)
-//             VALUES (?, (SELECT id FROM categories WHERE path = ?))
-//           `;
-//         categories.forEach((path) => {
-//           db.run(insertCategorySql, [noteId, path], callback);
-//         });
-//       }
-//       callback(null);
-//     });
-//   });
-// }
 
 module.exports = {
   getAllNotes,
