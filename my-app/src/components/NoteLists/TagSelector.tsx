@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   Autocomplete,
   TextField,
@@ -12,10 +12,10 @@ import useTags from "../../hooks/useTags";
 
 function TagSelector() {
   // 选择的标签
-  const { selectedTags, setSelectedTags, tagsDirty, setTagsDirty } =
+  const { selectedTags, setSelectedTags, tagsDirty } =
     useContext(NoteFilterContext);
   // 标签选项
-  const { data: tagOptions } = useTags(tagsDirty, setTagsDirty);
+  const { data: tagOptions } = useTags(tagsDirty);
 
   return (
     <>

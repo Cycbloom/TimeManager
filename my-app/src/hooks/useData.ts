@@ -20,29 +20,33 @@ const useData = <T extends IdEntity>(
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const fetchData = () => {
+    const contoller = new AbortController();
+
+    setLoading(true);
+    apiClient
+      .get<FetchResponse<T>>(endpoint, {
+        signal: contoller.signal,
+        ...requestConfig,
+      })
+      .then((response) => {
+        setData(response.data.results);
+        setLoading(false);
+      })
+      .catch((error) => {
+        if (error instanceof CanceledError) return;
+        setError(error.message);
+        setLoading(false);
+      });
+
+    return () => {
+      contoller.abort();
+    };
+  };
+
   useEffect(
     () => {
-      const contoller = new AbortController();
-
-      setLoading(true);
-      apiClient
-        .get<FetchResponse<T>>(endpoint, {
-          signal: contoller.signal,
-          ...requestConfig,
-        })
-        .then((response) => {
-          setData(response.data.results);
-          setLoading(false);
-        })
-        .catch((error) => {
-          if (error instanceof CanceledError) return;
-          setError(error.message);
-          setLoading(false);
-        });
-
-      return () => {
-        contoller.abort();
-      };
+      return fetchData();
     },
     deps ? [...deps] : []
   );
@@ -98,6 +102,14 @@ const useData = <T extends IdEntity>(
       });
   };
 
-  return { data, error, loading, postData, deleteData, updateData };
+  return {
+    data,
+    error,
+    loading,
+    refetch: fetchData,
+    postData,
+    deleteData,
+    updateData,
+  };
 };
 export default useData;
