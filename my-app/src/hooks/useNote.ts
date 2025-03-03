@@ -6,6 +6,7 @@ import { useMemo } from "react"; // 引入 useMemo
 
 export interface Note extends FormData {
   id: number;
+  notebook_id: number | null;
 }
 
 const useNote = (noteQuery: NoteQuery) => {

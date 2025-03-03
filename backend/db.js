@@ -15,6 +15,21 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 // 初始化数据库表
 db.serialize(() => {
+  // 创建 notebooks 表
+  db.run(
+    `
+      CREATE TABLE IF NOT EXISTS notebooks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `,
+    (err) => {
+      if (err) console.error("Error creating 'notebooks' table:", err);
+      else console.log("Table 'notebooks' is ready.");
+    }
+  );
   // 创建 notes 表
   db.run(
     `
@@ -23,8 +38,10 @@ db.serialize(() => {
         title TEXT,
         content TEXT,
         type TEXT CHECK(type IN ('article', 'problem', 'solution', 'reference')),
+        notebook_id INTEGER DEFAULT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (notebook_id) REFERENCES notebooks(id) ON DELETE SET NULL
       )
     `,
     (err) => {

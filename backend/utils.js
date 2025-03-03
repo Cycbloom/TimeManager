@@ -13,12 +13,11 @@ function query(sql, params, callback) {
   });
 }
 
-// 格式化笔记的 tags 和 categories 字段
+// 格式化笔记的 tags 字段
 function formatNote(note) {
   return {
     ...note,
     tags: note.tags ? note.tags.split(",") : [],
-    categories: note.categories ? note.categories.split(",") : [],
   };
 }
 

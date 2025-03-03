@@ -4,7 +4,7 @@ const db = require("../db");
 // 获取所有笔记
 // 获取所有笔记（支持过滤）
 function getAllNotes(req, res) {
-  const { queryType, queryTags } = req.query;
+  const { queryType, queryTags, queryNotebook } = req.query;
   let sql = `
     SELECT notes.*, 
            GROUP_CONCAT(DISTINCT tags.name) AS tags
@@ -13,10 +13,10 @@ function getAllNotes(req, res) {
     LEFT JOIN tags ON note_tags.tag_id = tags.id
   `;
 
-  const params = [];
-
   // 添加 WHERE 条件
+  const params = [];
   const conditions = [];
+
   if (queryType) {
     conditions.push("notes.type = ?");
     params.push(queryType);
@@ -26,6 +26,11 @@ function getAllNotes(req, res) {
     const tagPlaceholders = queryTags.map(() => "?").join(",");
     conditions.push(`tags.id IN (${tagPlaceholders})`);
     params.push(...queryTags);
+  }
+
+  if (queryNotebook) {
+    conditions.push("notes.notebook_id = ?");
+    params.push(parseInt(queryNotebook));
   }
 
   if (conditions.length > 0) {
@@ -71,7 +76,7 @@ function createNote(req, res) {
     content,
     type = "article",
     tags = [],
-    categories = [],
+    notebook_id = NULL,
   } = req.body;
 
   if (!content) {
@@ -79,10 +84,10 @@ function createNote(req, res) {
   }
 
   const sql = `
-    INSERT INTO notes (title, content, type, created_at, updated_at)
-    VALUES (?, ?, ?, datetime('now'), datetime('now'))
+    INSERT INTO notes (title, content, type, notebook_id, created_at, updated_at)
+    VALUES (?, ?, ?, ?, datetime('now'), datetime('now'))
   `;
-  const params = [title || "Untitled", content, type];
+  const params = [title || "Untitled", content, type, notebook_id];
 
   db.run(sql, params, function (err) {
     if (err) return res.status(500).json({ error: "Internal Server Error" });

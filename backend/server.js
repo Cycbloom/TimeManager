@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const noteController = require("./controllers/noteController");
 const tagsController = require("./controllers/tagsController");
+const notebookController = require("./controllers/notebookController");
 
 const app = express();
 
@@ -11,6 +12,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // 路由
+app.get("/api/notebooks", notebookController.getAllNotebooks);
+app.get("/api/notebooks/:id", notebookController.getNotebookById);
+app.post("/api/notebooks", notebookController.createNotebook);
+app.put("/api/notebooks/:id", notebookController.updateNotebook);
+app.delete("/api/notebooks/:id", notebookController.deleteNotebook);
+
 app.get("/api/notes", noteController.getAllNotes);
 app.get("/api/notes/:id", noteController.getNoteById);
 app.post("/api/notes", noteController.createNote);

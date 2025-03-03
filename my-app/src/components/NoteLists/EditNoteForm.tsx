@@ -12,6 +12,7 @@ const EditNoteForm = ({ note, onUpdateNote, onClose }: Props) => {
   const onSubmit = (data: FormData) => {
     onUpdateNote({
       id: note.id, // 保留原始 ID
+      notebook_id: note.notebook_id,
       ...data,
     });
     onClose(); // 关闭编辑窗口
