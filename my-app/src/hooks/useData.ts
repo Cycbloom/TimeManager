@@ -56,7 +56,7 @@ const useData = <T extends IdEntity>(
     apiClient
       .post<T>(endpoint, { ...postData }, requestConfig)
       .then((response) => {
-        setData([...data, response.data]);
+        setData([response.data, ...data]);
         setLoading(false);
       })
       .catch((error) => {
