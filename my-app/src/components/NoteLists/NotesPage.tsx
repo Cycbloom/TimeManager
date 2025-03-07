@@ -1,3 +1,4 @@
+// src/components/NoteLists/NotePage.tsx
 import { Container, Grid2 as Grid, Typography } from "@mui/material";
 import useNote from "../../hooks/useNote";
 
