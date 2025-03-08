@@ -4,13 +4,13 @@ import { Box, Alert, CircularProgress } from "@mui/material";
 import { NoteFilterContext } from "../NoteFilterContext";
 import NewNotebookInput from "./NewNotebookInput";
 import NotebookList from "./NotebookList";
-import { useDataTest } from "../../../data/DataContext";
+import { useData } from "../../../data/DataContext";
 
 const NotebookSidebar = () => {
   const { selectedNotebook, setSelectedNotebook } =
     useContext(NoteFilterContext);
 
-  const { notebooks } = useDataTest();
+  const { notebooks } = useData();
 
   useEffect(() => {
     notebooks.fetch();

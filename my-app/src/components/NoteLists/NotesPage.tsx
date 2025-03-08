@@ -8,7 +8,7 @@ import { NoteFilterContext, Tag } from "./NoteFilterContext";
 import { NoteType } from "./BaseNoteForm";
 import { useContext, useEffect } from "react";
 import NotebookSidebar from "./NotebookSidebar";
-import { useDataTest } from "../../data/DataContext";
+import { useData } from "../../data/DataContext";
 
 export interface NoteQuery {
   queryType: NoteType | null;
@@ -26,7 +26,7 @@ const NotePage = () => {
     queryNotebook: selectedNotebook,
   };
 
-  const { notes } = useDataTest();
+  const { notes } = useData();
 
   useEffect(() => {
     notes.fetch(noteQuery);

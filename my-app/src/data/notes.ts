@@ -1,0 +1,33 @@
+// src/data/notes.ts
+import { createDataSlice } from "./DataSlice";
+import { Note } from "../hooks/useNote";
+import { NoteQuery } from "../components/NoteLists/NotesPage";
+import apiClient from "../services/api-client";
+
+export function createNotesSlice() {
+  const baseSlice = createDataSlice<Note, NoteQuery>({
+    endpoint: "/api/notes",
+  });
+
+  const moveToNotebook = async (noteId: number, notebookId: number) => {
+    try {
+      await apiClient.patch(`/api/notes/${noteId}/notebook`, { notebookId });
+      baseSlice._setData((prev) =>
+        prev.map((note) =>
+          note.id === noteId ? { ...note, notebook_id: notebookId } : note
+        )
+      );
+    } catch (error) {
+      baseSlice._setError(
+        error instanceof Error ? error.message : "移动笔记失败"
+      );
+    }
+  };
+
+  return {
+    ...baseSlice,
+    moveToNotebook,
+  };
+}
+
+export type NotesSlice = ReturnType<typeof createNotesSlice>;

@@ -9,14 +9,14 @@ import {
 } from "@mui/material";
 import { NoteFilterContext } from "./NoteFilterContext";
 
-import { useDataTest } from "../../data/DataContext";
+import { useData } from "../../data/DataContext";
 
 function TagSelector() {
   // 选择的标签
   const { selectedTags, setSelectedTags, tagsDirty } =
     useContext(NoteFilterContext);
   // 标签选项
-  const { tags } = useDataTest();
+  const { tags } = useData();
 
   useEffect(() => {
     tags.fetch();
