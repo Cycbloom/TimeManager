@@ -1,3 +1,4 @@
+// src/components/NoteLists/NoteItem.tsx
 import { ListItem, ListItemText, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -10,8 +11,19 @@ interface Props {
 }
 
 const NoteItem = ({ note, onEdit, onDelete }: Props) => {
+  const handleDragStart = (event: React.DragEvent) => {
+    event.dataTransfer.setData("note/id", note.id.toString());
+    event.currentTarget.classList.add("dragging");
+  };
+  const handleDragEnd = (event: React.DragEvent) => {
+    event.currentTarget.classList.remove("draging");
+  };
+
   return (
     <ListItem
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       secondaryAction={
         <>
           <IconButton edge="end" aria-label="edit" onClick={() => onEdit(note)}>
