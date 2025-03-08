@@ -12,6 +12,9 @@ interface IdEntity {
   id: number;
 }
 
+/**
+ * @deprecated This hook is no longer recommended for use.
+ */
 const useData = <T extends IdEntity>(
   endpoint: string,
   requestConfig?: AxiosRequestConfig,

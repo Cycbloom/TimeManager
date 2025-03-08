@@ -6,6 +6,9 @@ export interface Notebook {
   name: string;
 }
 
+/**
+ * @deprecated This hook is no longer recommended for use.
+ */
 const useNotebooks = (initialQuery = {}) => {
   // 使用 useData 获取笔记本数据
   const {

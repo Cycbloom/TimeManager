@@ -10,6 +10,9 @@ export interface Note extends FormData {
   notebook_id: number | null;
 }
 
+/**
+ * @deprecated This hook is no longer recommended for use.
+ */
 const useNote = (noteQuery: NoteQuery) => {
   // 使用 useMemo 稳定 noteQuery 的引用
   const stableNoteQuery = useMemo(

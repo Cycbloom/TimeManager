@@ -1,5 +1,5 @@
 // src/components/NoteLists/TagSelector.tsx
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   Autocomplete,
   TextField,
@@ -9,14 +9,18 @@ import {
 } from "@mui/material";
 import { NoteFilterContext } from "./NoteFilterContext";
 
-import useTags from "../../hooks/useTags";
+import { useDataTest } from "../../data/DataContext";
 
 function TagSelector() {
   // 选择的标签
   const { selectedTags, setSelectedTags, tagsDirty } =
     useContext(NoteFilterContext);
   // 标签选项
-  const { data: tagOptions } = useTags(tagsDirty);
+  const { tags } = useDataTest();
+
+  useEffect(() => {
+    tags.fetch();
+  }, [tagsDirty]);
 
   return (
     <>
@@ -30,7 +34,7 @@ function TagSelector() {
         </FormLabel>
         <Autocomplete
           multiple // 允许选择多个标签
-          options={tagOptions}
+          options={tags.data}
           getOptionLabel={(option) => option.name} // 显示标签的名字
           value={selectedTags}
           onChange={(_event, newValue) => {

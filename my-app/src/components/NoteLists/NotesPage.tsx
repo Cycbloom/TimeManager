@@ -6,8 +6,9 @@ import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
 import { NoteFilterContext, Tag } from "./NoteFilterContext";
 import { NoteType } from "./BaseNoteForm";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import NotebookSidebar from "./NotebookSidebar";
+import { useDataTest } from "../../data/DataContext";
 
 export interface NoteQuery {
   queryType: NoteType | null;
@@ -25,14 +26,11 @@ const NotePage = () => {
     queryNotebook: selectedNotebook,
   };
 
-  const {
-    data: notesData,
-    error: noteError,
-    postData: addNote,
-    deleteData: deleteNote,
-    updateData: updateNote,
-    loading,
-  } = useNote(noteQuery);
+  const { notes } = useDataTest();
+
+  useEffect(() => {
+    notes.fetch(noteQuery);
+  }, [selectedType, selectedTags, selectedNotebook]);
 
   return (
     <Container maxWidth="xl">
@@ -41,13 +39,13 @@ const NotePage = () => {
           <NotebookSidebar />
         </Grid>
         <Grid size={9}>
-          <NoteForm onAddNote={addNote} />
-          {loading && <Typography>Loading...</Typography>}
-          {noteError && <Typography color="error">{noteError}</Typography>}
+          <NoteForm onAddNote={notes.create} />
+          {notes.loading && <Typography>Loading...</Typography>}
+          {notes.error && <Typography color="error">{notes.error}</Typography>}
           <NoteList
-            notes={notesData}
-            onDelete={deleteNote}
-            onUpdate={updateNote}
+            notes={notes.data}
+            onDelete={notes.delete}
+            onUpdate={notes.update}
           />
         </Grid>
       </Grid>
