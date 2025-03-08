@@ -22,6 +22,10 @@ interface DataSlice<T extends BaseEntity, TQuery = unknown> {
   update: (item: T) => Promise<void>;
   delete: (id: number) => Promise<void>;
 
+  //缓存功能
+  currentQuery: TQuery | undefined;
+  refresh: () => Promise<void>;
+
   // 暴露内部状态更新方法
   _setData: React.Dispatch<React.SetStateAction<T[]>>;
   _setError: React.Dispatch<React.SetStateAction<string>>;
@@ -34,6 +38,9 @@ export function createDataSlice<T extends BaseEntity, TQuery = unknown>(
   const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState<TQuery | undefined>(
+    config.initialQuery
+  );
 
   const handleRequest = async <R>(
     request: () => Promise<R>,
@@ -51,12 +58,26 @@ export function createDataSlice<T extends BaseEntity, TQuery = unknown>(
     }
   };
 
-  const fetch = useCallback(async (query?: TQuery) => {
-    await handleRequest(
-      () => apiClient.get<{ results: T[] }>(config.endpoint, { params: query }),
-      (response) => setData(response.data.results)
-    );
-  }, []);
+  const fetch = useCallback(
+    async (query?: TQuery) => {
+      const effectiveQuery = query ?? currentQuery;
+
+      await handleRequest(
+        () =>
+          apiClient.get<{ results: T[] }>(config.endpoint, { params: query }),
+        (response) => {
+          setData(response.data.results);
+          setCurrentQuery(effectiveQuery);
+        }
+      );
+    },
+    [currentQuery]
+  );
+
+  const refresh = useCallback(async () => {
+    if (!currentQuery) return;
+    await fetch(currentQuery);
+  }, [currentQuery, fetch]);
 
   const create = useCallback(async (item: Omit<T, "id">) => {
     return handleRequest(
@@ -86,7 +107,9 @@ export function createDataSlice<T extends BaseEntity, TQuery = unknown>(
     data,
     error,
     loading,
+    currentQuery,
     fetch,
+    refresh,
     create,
     update,
     delete: deleteItem,
