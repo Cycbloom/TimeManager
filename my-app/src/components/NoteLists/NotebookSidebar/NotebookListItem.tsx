@@ -32,10 +32,17 @@ const NotebookListItem = ({
   const [isDragOver, setIsDragOver] = useState(false);
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
-    setIsDragOver(true);
+    const rect = event.currentTarget.getBoundingClientRect();
+    const isInSafeZone =
+      event.clientY > rect.top + 5 && event.clientY < rect.bottom - 5;
+    setIsDragOver(isInSafeZone);
   };
-  const handleDragLeave = (_event: React.DragEvent) => {
-    setIsDragOver(false);
+  const handleDragLeave = (event: React.DragEvent) => {
+    // 精确判断是否真正离开当前元素
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    if (!event.currentTarget.contains(relatedTarget)) {
+      setIsDragOver(false);
+    }
   };
   const handleDrop = (event: React.DragEvent) => {
     setIsDragOver(false);
@@ -43,7 +50,6 @@ const NotebookListItem = ({
     const notebookId = notebook.id;
     if (!isNaN(noteId)) {
       notes.moveToNotebook(noteId, notebookId);
-      console.log(selectedNotebook);
       if (selectedNotebook) {
         notes.refresh();
       }
@@ -56,8 +62,26 @@ const NotebookListItem = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       sx={{
-        bgcolor: isDragOver ? "action.hover" : "inherit",
-        transition: "background-color 0.3s",
+        position: "relative",
+        bgcolor: isDragOver ? "rgba(25, 118, 210, 0.1)" : "inherit",
+        borderLeft: selected ? "3px solid #1976d2" : "none",
+        border: isDragOver ? "2px dashed #1976d2" : "none",
+        borderRadius: 1,
+        overflow: "hidden",
+        transition: (theme) =>
+          theme.transitions.create(["all"], {
+            duration: theme.transitions.duration.shortest,
+          }),
+        "&:hover:not(.Mui-selected)": {
+          backgroundColor: "rgba(0, 0, 0, 0.04)",
+          "& .MuiListItemSecondaryAction-root": {
+            opacity: 0.8,
+          },
+        },
+        "& .MuiListItemSecondaryAction-root": {
+          transition: "opacity 0.2s",
+          opacity: selected ? 1 : 0.6,
+        },
       }}
       disablePadding
       secondaryAction={
@@ -66,13 +90,45 @@ const NotebookListItem = ({
         </IconButton>
       }
     >
-      <ListItemButton selected={selected} onClick={onSelect}>
+      <ListItemButton
+        selected={selected}
+        onClick={onSelect}
+        sx={{
+          pr: 6, // 给右侧按钮留出空间
+          "&.Mui-selected": {
+            backgroundColor: "rgba(25, 118, 210, 0.08)",
+            "&:hover": {
+              backgroundColor: "rgba(25, 118, 210, 0.12)",
+            },
+          },
+        }}
+      >
         <ListItemText
           primary={notebook.name}
+          secondary={isDragOver ? "松开以移动笔记到此笔记本" : undefined}
           slotProps={{
             primary: {
-              fontWeight: selected ? "bold" : "normal",
+              fontWeight: selected ? 600 : 400,
               noWrap: true,
+              sx: {
+                fontSize: "0.95rem",
+                lineHeight: 1.25,
+                letterSpacing: "0.02em",
+              },
+            },
+            secondary: {
+              color: "primary.main",
+              fontSize: "0.75rem",
+              lineHeight: 1.2,
+              position: "absolute",
+              right: 48,
+              top: "50%",
+            },
+          }}
+          sx={{
+            "& .MuiTypography-root": {
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             },
           }}
         />
