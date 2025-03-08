@@ -1,6 +1,6 @@
 // src/components/NoteLists/NotebookSidebar/NotebookList.tsx
 import { List } from "@mui/material";
-import { Notebook } from "../../../hooks/useNotebooks";
+import { Notebook } from "../../../types/notes";
 import AllNotesListItem from "./AllNotesListItem";
 import NotebookListItem from "./NotebookListItem";
 

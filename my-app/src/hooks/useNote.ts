@@ -1,14 +1,8 @@
 // src/hooks/useNote.ts
 import useData from "./useData";
-import { Note } from "@mui/icons-material";
-import { FormData } from "../components/NoteLists/BaseNoteForm";
-import { NoteQuery } from "../components/NoteLists/NotesPage";
-import { useMemo } from "react"; // 引入 useMemo
+import { Note, NoteQuery } from "../types/notes"; // 更新导入路径
 
-export interface Note extends FormData {
-  id: number;
-  notebook_id: number | null;
-}
+import { useMemo } from "react"; // 引入 useMemo
 
 /**
  * @deprecated This hook is no longer recommended for use.

@@ -6,7 +6,7 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Notebook } from "../../../hooks/useNotebooks";
+import { Notebook } from "../../../types/notes";
 
 interface NotebookListItemProps {
   notebook: Notebook;

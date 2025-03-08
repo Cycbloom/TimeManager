@@ -1,6 +1,5 @@
-import { Note } from "../../hooks/useNote";
 import BaseNoteForm from "./BaseNoteForm";
-import { FormData } from "./BaseNoteForm";
+import { NoteFormData, Note } from "../../types";
 
 interface Props {
   note: Note;
@@ -9,7 +8,7 @@ interface Props {
 }
 
 const EditNoteForm = ({ note, onUpdateNote, onClose }: Props) => {
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: NoteFormData) => {
     onUpdateNote({
       id: note.id, // 保留原始 ID
       notebook_id: note.notebook_id,

@@ -1,6 +1,6 @@
 import { List, Typography, Divider } from "@mui/material";
 import { useState } from "react";
-import { Note } from "../../hooks/useNote";
+import { Note } from "../../types/notes";
 import NoteItem from "./NoteItem";
 import EditNoteDialog from "./EditNoteDialog";
 import NoteSelector from "./NoteSelector";

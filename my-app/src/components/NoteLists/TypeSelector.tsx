@@ -11,7 +11,7 @@ import { useContext } from "react";
 import { NoteFilterContext } from "./NoteFilterContext";
 
 // 定义类型选项的数据结构
-import { NoteType, typeOptions } from "./BaseNoteForm";
+import { NoteType, noteTypeOptions } from "../../types/notes";
 
 // 类型筛选组件
 const TypeSelector = () => {
@@ -24,7 +24,7 @@ const TypeSelector = () => {
   };
 
   // 添加清空选项
-  const optionsWithAll = ["", ...typeOptions];
+  const optionsWithAll = ["", ...noteTypeOptions];
 
   return (
     <>

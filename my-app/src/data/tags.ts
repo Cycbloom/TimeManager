@@ -1,6 +1,6 @@
 // src/data/notes.ts
 import { createDataSlice } from "./DataSlice";
-import { Tag } from "../components/NoteLists/NoteFilterContext";
+import { Tag } from "../types/notes";
 
 export function createTagsSlice() {
   const baseSlice = createDataSlice<Tag>({

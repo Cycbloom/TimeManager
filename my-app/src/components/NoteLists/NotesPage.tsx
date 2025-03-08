@@ -1,20 +1,13 @@
 // src/components/NoteLists/NotePage.tsx
 import { Container, Grid2 as Grid, Typography } from "@mui/material";
-import useNote from "../../hooks/useNote";
 
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
-import { NoteFilterContext, Tag } from "./NoteFilterContext";
-import { NoteType } from "./BaseNoteForm";
+import { NoteFilterContext } from "./NoteFilterContext";
+import { NoteQuery, Tag } from "../../types/notes";
 import { useContext, useEffect } from "react";
 import NotebookSidebar from "./NotebookSidebar";
 import { useData } from "../../data/DataContext";
-
-export interface NoteQuery {
-  queryType: NoteType | null;
-  queryTags: number[];
-  queryNotebook: number | null;
-}
 
 const NotePage = () => {
   const { selectedType, selectedTags, selectedNotebook } =

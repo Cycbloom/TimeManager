@@ -1,6 +1,6 @@
 import { Dialog, Box } from "@mui/material";
 import EditNoteForm from "./EditNoteForm";
-import { Note } from "../../hooks/useNote";
+import { Note } from "../../types/notes";
 
 interface Props {
   open: boolean;

@@ -1,12 +1,7 @@
 // src/components/NoteLists/NoteFilterContext.tsx
 import { createContext, useState } from "react";
 
-import { NoteType } from "./BaseNoteForm";
-
-export interface Tag {
-  id: number;
-  name: string;
-}
+import { NoteType, Tag } from "../../types/notes";
 
 interface NoteFilterContextType {
   selectedType: NoteType | null;

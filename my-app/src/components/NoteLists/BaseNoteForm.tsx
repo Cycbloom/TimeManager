@@ -10,30 +10,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import { NoteFilterContext } from "./NoteFilterContext";
-
-// 定义 type 的枚举
-const typeEnum = z.enum(["article", "problem", "solution", "reference"]);
-// 导出 type 的类型
-export type NoteType = z.infer<typeof typeEnum>;
-export const typeOptions = typeEnum.options;
-
-const schema = z.object({
-  title: z.string().nonempty("Title is required"),
-  content: z.string().nonempty("Content is required"),
-  type: typeEnum,
-  tags: z.array(z.string()),
-});
-
-export type FormData = z.infer<typeof schema>;
+import { NoteFormData, noteFormSchema } from "../../types/notes";
 
 interface Props {
-  onSubmit: SubmitHandler<FormData>;
-  defaultValues?: Partial<FormData>;
+  onSubmit: SubmitHandler<NoteFormData>;
+  defaultValues?: Partial<NoteFormData>;
   submitButtonText: string;
   formTitle: string;
 }
@@ -50,15 +35,15 @@ const BaseNoteForm = ({
     formState: { errors },
     watch,
     reset,
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  } = useForm<NoteFormData>({
+    resolver: zodResolver(noteFormSchema),
     defaultValues,
   });
 
   const [tagsInput, setTagsInput] = useState("");
   const { setTagsDirty } = useContext(NoteFilterContext);
 
-  const handleFormSubmit: SubmitHandler<FormData> = (data) => {
+  const handleFormSubmit: SubmitHandler<NoteFormData> = (data) => {
     onSubmit(data);
     const tagsChanged =
       JSON.stringify(data.tags) !== JSON.stringify(defaultValues.tags);

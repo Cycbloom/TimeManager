@@ -1,7 +1,6 @@
 // src/data/notes.ts
 import { createDataSlice } from "./DataSlice";
-import { Note } from "../hooks/useNote";
-import { NoteQuery } from "../components/NoteLists/NotesPage";
+import { Note, NoteQuery } from "../types/notes";
 import apiClient from "../services/api-client";
 
 export function createNotesSlice() {

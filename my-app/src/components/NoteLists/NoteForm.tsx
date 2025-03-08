@@ -1,6 +1,5 @@
 import { useContext } from "react";
-import { Note } from "../../hooks/useNote";
-import { FormData } from "./BaseNoteForm";
+import { NoteFormData, Note } from "../../types";
 import BaseNoteForm from "./BaseNoteForm";
 import { NoteFilterContext } from "./NoteFilterContext";
 
@@ -11,7 +10,7 @@ interface Props {
 const NoteForm = ({ onAddNote }: Props) => {
   const { selectedNotebook } = useContext(NoteFilterContext);
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: NoteFormData) => {
     onAddNote({
       id: 0, // ID 由后端生成
       ...data,

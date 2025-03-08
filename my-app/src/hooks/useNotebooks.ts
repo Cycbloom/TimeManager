@@ -1,10 +1,6 @@
 // src/hooks/useNotebooks.ts
 import useData from "./useData";
-
-export interface Notebook {
-  id: number;
-  name: string;
-}
+import { Notebook } from "../types/notes";
 
 /**
  * @deprecated This hook is no longer recommended for use.

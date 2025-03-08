@@ -1,6 +1,6 @@
 // src/data/notebooks.ts
 import { createDataSlice } from "./DataSlice";
-import { Notebook } from "../hooks/useNotebooks";
+import { Notebook } from "../types/notes";
 import apiClient from "../services/api-client";
 
 export function createNotebooksSlice() {
