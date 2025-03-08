@@ -8,7 +8,7 @@ export function createNotebooksSlice() {
 
   const rename = async (id: number, newName: string) => {
     try {
-      await apiClient.patch(`/api/notebooks/${id}/name`, { name: newName });
+      await apiClient.patch(`/api/notebooks/${id}/rename`, { name: newName });
       baseSlice._setData((prev) =>
         prev.map((notebook) =>
           notebook.id === id ? { ...notebook, name: newName } : notebook

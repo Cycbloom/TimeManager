@@ -15,6 +15,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 // 初始化数据库表
 db.serialize(() => {
+  db.run("PRAGMA foreign_keys = ON"); // 开启外键约束
   // 创建 notebooks 表
   db.run(
     `

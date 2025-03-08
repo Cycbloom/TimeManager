@@ -1,3 +1,4 @@
+// server.js 是服务端的入口文件，用于启动服务器、配置中间件、路由等。
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -17,12 +18,14 @@ app.get("/api/notebooks/:id", notebookController.getNotebookById);
 app.post("/api/notebooks", notebookController.createNotebook);
 app.put("/api/notebooks/:id", notebookController.updateNotebook);
 app.delete("/api/notebooks/:id", notebookController.deleteNotebook);
+app.patch("/api/notebooks/:id/rename", notebookController.renameNotebook);
 
 app.get("/api/notes", noteController.getAllNotes);
 app.get("/api/notes/:id", noteController.getNoteById);
 app.post("/api/notes", noteController.createNote);
 app.put("/api/notes/:id", noteController.updateNote);
 app.delete("/api/notes/:id", noteController.deleteNote);
+app.patch("/api/notes/:id/notebook", noteController.moveToNotebook);
 
 app.get("/api/tags", tagsController.getAllTags);
 

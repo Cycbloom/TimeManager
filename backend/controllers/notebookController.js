@@ -1,3 +1,4 @@
+// controllers/notebookController.js 是一个控制器文件，用于处理笔记本相关的请求。
 const db = require("../db");
 
 const notebookController = {
@@ -53,6 +54,22 @@ const notebookController = {
       if (err) return res.status(500).json({ error: err.message });
       this.changes > 0 ? res.sendStatus(204) : res.sendStatus(404);
     });
+  },
+
+  renameNotebook: (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!name) return res.status(400).json({ error: "Name is required" });
+
+    db.run(
+      "UPDATE notebooks SET name = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+      [name, id],
+      function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        this.changes > 0 ? res.sendStatus(204) : res.sendStatus(404);
+      }
+    );
   },
 };
 

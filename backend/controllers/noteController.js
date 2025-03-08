@@ -1,3 +1,4 @@
+// contollers/noteController.js
 const { query, formatNote } = require("../utils");
 const db = require("../db");
 
@@ -188,10 +189,49 @@ function updateTagsForNote(noteId, tags, callback) {
   });
 }
 
+// controllers/noteController.js
+function moveToNotebook(req, res) {
+  const { id } = req.params;
+  const { notebookId } = req.body;
+
+  if (!notebookId) {
+    return res.status(400).json({ error: "notebookId 参数必填" });
+  }
+
+  // 验证笔记本是否存在
+  db.get(
+    "SELECT id FROM notebooks WHERE id = ?",
+    [notebookId],
+    (err, notebook) => {
+      if (err) return res.status(500).json({ error: "数据库错误" });
+      if (!notebook) return res.status(400).json({ error: "目标笔记本不存在" });
+
+      // 执行更新操作
+      db.run(
+        `UPDATE notes 
+         SET notebook_id = ?, updated_at = datetime('now')
+         WHERE id = ?`,
+        [notebookId, id],
+        function (err) {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ error: "更新笔记本失败" });
+          }
+          if (this.changes === 0) {
+            return res.status(404).json({ error: "笔记不存在" });
+          }
+          res.sendStatus(204);
+        }
+      );
+    }
+  );
+}
+
 module.exports = {
   getAllNotes,
   getNoteById,
   createNote,
   updateNote,
   deleteNote,
+  moveToNotebook,
 };
