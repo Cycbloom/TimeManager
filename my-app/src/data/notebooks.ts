@@ -27,4 +27,7 @@ export function createNotebooksSlice() {
   };
 }
 
-export type NotebooksSlice = ReturnType<typeof createNotebooksSlice>;
+export type NotebooksSlice = Omit<
+  ReturnType<typeof createNotebooksSlice>,
+  "_setData" | "_setError"
+>;

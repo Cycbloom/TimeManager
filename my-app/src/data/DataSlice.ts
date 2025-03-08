@@ -94,3 +94,9 @@ export function createDataSlice<T extends BaseEntity, TQuery = unknown>(
     _setError: setError,
   };
 }
+
+// 使用Omit隐藏内部方法
+export type PublicDataSlice<T extends BaseEntity, TQuery = unknown> = Omit<
+  DataSlice<T, TQuery>,
+  "_setData" | "_setError"
+>;

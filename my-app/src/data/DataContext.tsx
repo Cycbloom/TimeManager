@@ -1,14 +1,13 @@
 // src/data/DataContext.tsx
 import { createContext, useContext } from "react";
-import { Tag } from "../components/NoteLists/NoteFilterContext";
-import { createNotesSlice } from "./notes";
-import { createNotebooksSlice } from "./notebooks";
-import { createDataSlice } from "./DataSlice";
+import { createNotesSlice, NotesSlice } from "./notes";
+import { createNotebooksSlice, NotebooksSlice } from "./notebooks";
+import { createTagsSlice, tagsSlice } from "./tags";
 
 export type DataContextType = {
-  notes: ReturnType<typeof createNotesSlice>;
-  notebooks: ReturnType<typeof createNotebooksSlice>;
-  tags: ReturnType<typeof createDataSlice<Tag>>;
+  notes: NotesSlice;
+  notebooks: NotebooksSlice;
+  tags: tagsSlice;
 };
 
 const DataContext = createContext<DataContextType>({} as DataContextType);
@@ -16,7 +15,7 @@ const DataContext = createContext<DataContextType>({} as DataContextType);
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const notes = createNotesSlice();
   const notebooks = createNotebooksSlice();
-  const tags = createDataSlice<Tag>({ endpoint: "/api/tags" });
+  const tags = createTagsSlice();
   return (
     <DataContext.Provider value={{ notes, notebooks, tags }}>
       {children}

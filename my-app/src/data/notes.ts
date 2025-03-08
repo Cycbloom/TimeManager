@@ -30,4 +30,7 @@ export function createNotesSlice() {
   };
 }
 
-export type NotesSlice = ReturnType<typeof createNotesSlice>;
+export type NotesSlice = Omit<
+  ReturnType<typeof createNotesSlice>,
+  "_setData" | "_setError"
+>;
