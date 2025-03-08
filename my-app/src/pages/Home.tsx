@@ -1,9 +1,9 @@
-import NotePageContainer from "../components/NoteLists/NotePageContainer";
+import TaskPage from "../components/Tasks/TaskPage";
 
 const Home = () => {
   return (
     <div>
-      <NotePageContainer />
+      <TaskPage />
     </div>
   );
 };

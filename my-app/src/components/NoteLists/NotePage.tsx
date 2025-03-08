@@ -1,16 +1,16 @@
-// src/components/NoteLists/NotePageContainer.tsx
+// src/components/NoteLists/NotePage.tsx
 import { DataProvider } from "../../data/DataContext";
 import { NoteFilterProvider } from "./NoteFilterContext";
-import NotePage from "./NotesPage";
+import NotePageContent from "./NotesPageContent";
 
-const NotePageContainer = () => {
+const NotePage = () => {
   return (
     <DataProvider>
       <NoteFilterProvider>
-        <NotePage />
+        <NotePageContent />
       </NoteFilterProvider>
     </DataProvider>
   );
 };
 
-export default NotePageContainer;
+export default NotePage;

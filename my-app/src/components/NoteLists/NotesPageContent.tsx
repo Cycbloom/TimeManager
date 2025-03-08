@@ -1,4 +1,4 @@
-// src/components/NoteLists/NotePage.tsx
+// src/components/NoteLists/NotesPageContent.tsx
 import { Container, Grid2 as Grid, Typography } from "@mui/material";
 
 import NoteForm from "./NoteForm";
@@ -9,7 +9,7 @@ import { useContext, useEffect } from "react";
 import NotebookSidebar from "./NotebookSidebar";
 import { useData } from "../../data/DataContext";
 
-const NotePage = () => {
+const NotesPageContent = () => {
   const { selectedType, selectedTags, selectedNotebook } =
     useContext(NoteFilterContext);
 
@@ -46,4 +46,4 @@ const NotePage = () => {
   );
 };
 
-export default NotePage;
+export default NotesPageContent;
