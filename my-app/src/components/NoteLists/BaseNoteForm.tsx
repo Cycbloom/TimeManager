@@ -43,7 +43,7 @@ const BaseNoteForm = ({
           )}
           <FormInput name="title" label="Title" />
           <FormInput name="content" label="Content" multiline />
-          <TypeSelect name="type" label="Type" />
+          <TypeSelect />
           <TagInput name="tags" label="Tags" />
           <Button
             variant="contained"

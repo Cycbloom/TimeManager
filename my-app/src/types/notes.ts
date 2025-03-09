@@ -1,5 +1,6 @@
 // src/types/notes.ts
 import { z } from "zod";
+import { SelectOption } from "../components/forms/GenericSelect";
 
 // 核心笔记类型
 export interface Note {
@@ -60,3 +61,10 @@ export interface ApiResponse<T> {
   error?: string;
   count?: number;
 }
+
+export const noteTypeOptionsVer2: SelectOption[] = [
+  { value: "article", label: "文章" },
+  { value: "problem", label: "问题" },
+  { value: "solution", label: "解决方案" },
+  { value: "reference", label: "参考资料" },
+];

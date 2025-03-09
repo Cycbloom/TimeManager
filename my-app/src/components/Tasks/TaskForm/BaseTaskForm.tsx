@@ -30,7 +30,7 @@ const BaseTaskForm = ({ onSubmit, submitButtonText, formTitle }: Props) => (
         )}
         <FormInput name="title" label="任务标题" />
         <DatePickerField name="dueDate" label="截止日期" />
-        <PrioritySelect name="priority" label="优先级" />
+        <PrioritySelect />
         <TagInput name="tags" label="标签" />
         <FormInput
           name="estimatedHours"

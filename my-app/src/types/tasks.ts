@@ -1,5 +1,6 @@
 // 新建 src/types/tasks.ts
 import { z } from "zod";
+import { SelectOption } from "../components/forms/GenericSelect";
 
 export const taskFormSchema = z.object({
   title: z.string().min(1, "标题不能为空"),
@@ -19,3 +20,10 @@ export type TaskFormData = z.infer<typeof taskFormSchema>;
 export interface Task extends TaskFormData {
   id: string;
 }
+
+// src/types/tasks.ts
+export const priorityOptions: SelectOption[] = [
+  { value: "low", label: "低" },
+  { value: "medium", label: "中" },
+  { value: "high", label: "高" },
+];
