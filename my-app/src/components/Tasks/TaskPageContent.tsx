@@ -1,11 +1,13 @@
-import { useData } from "@/data/DataContext";
+import { useData } from "../../data/DataContext";
 import { Task, TaskFormData } from "../../types/tasks";
 import BaseTaskForm from "./TaskForm/BaseTaskForm";
+import TaskList from "./TaskList";
+import { Box } from "@mui/material";
 
 const TaskPageContent = () => {
   const { tasks } = useData();
 
-  const onSubmit = async (data: TaskFormData) => {
+  const handleCreate = async (data: TaskFormData) => {
     const newTask: Task = {
       ...data,
       id: 0,
@@ -15,12 +17,35 @@ const TaskPageContent = () => {
     tasks.create(newTask);
   };
 
+  const handleUpdate = async (task: Task) => {
+    tasks.update(task);
+  };
+
+  const handleDelete = async (taskId: number) => {
+    tasks.delete(taskId);
+  };
+
+  const handleStatusChange = async (
+    taskId: number,
+    newStatus: Task["status"]
+  ) => {
+    tasks.updateStatus(taskId, newStatus);
+  };
+
   return (
-    <BaseTaskForm
-      formTitle="创建任务"
-      submitButtonText="创建任务"
-      onSubmit={onSubmit}
-    />
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: 2 }}>
+      <BaseTaskForm
+        formTitle="创建任务"
+        submitButtonText="创建任务"
+        onSubmit={handleCreate}
+      />
+      <TaskList
+        tasks={tasks.data}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
+        onStatusChange={handleStatusChange}
+      />
+    </Box>
   );
 };
 
