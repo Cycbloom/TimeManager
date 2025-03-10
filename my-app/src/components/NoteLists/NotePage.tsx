@@ -1,14 +1,13 @@
 // src/components/NoteLists/NotePage.tsx
 import { DataProvider } from "../../data/DataContext";
-import { NoteFilterProvider } from "./NoteFilterContext";
 import NotePageContent from "./NotesPageContent";
-
+import { NotebookProvider } from "./NotebookContext";
 const NotePage = () => {
   return (
     <DataProvider>
-      <NoteFilterProvider>
+      <NotebookProvider>
         <NotePageContent />
-      </NoteFilterProvider>
+      </NotebookProvider>
     </DataProvider>
   );
 };

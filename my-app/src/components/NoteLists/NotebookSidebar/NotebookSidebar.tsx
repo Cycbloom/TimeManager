@@ -1,14 +1,13 @@
 // src/components/NoteLists/NotebookSidebar/NotebookSidebar.tsx
 import { useContext, useEffect } from "react";
 import { Box, Alert, CircularProgress } from "@mui/material";
-import { NoteFilterContext } from "../NoteFilterContext";
+import { NotebookContext } from "../NotebookContext";
 import NewNotebookInput from "./NewNotebookInput";
 import NotebookList from "./NotebookList";
 import { useData } from "../../../data/DataContext";
 
 const NotebookSidebar = () => {
-  const { selectedNotebook, setSelectedNotebook } =
-    useContext(NoteFilterContext);
+  const { selectedNotebook, setSelectedNotebook } = useContext(NotebookContext);
 
   const { notebooks } = useData();
 

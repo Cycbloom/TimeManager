@@ -9,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Notebook } from "../../../types/notes";
 import { useContext, useState } from "react";
 import { useData } from "../../../data/DataContext";
-import { NoteFilterContext } from "../NoteFilterContext";
+import { NotebookContext } from "../NotebookContext";
 
 interface NotebookListItemProps {
   notebook: Notebook;
@@ -27,7 +27,7 @@ const NotebookListItem = ({
   loading,
 }: NotebookListItemProps) => {
   const { notes } = useData();
-  const { selectedNotebook } = useContext(NoteFilterContext);
+  const { selectedNotebook } = useContext(NotebookContext);
 
   const [isDragOver, setIsDragOver] = useState(false);
   const handleDragOver = (event: React.DragEvent) => {
@@ -44,12 +44,12 @@ const NotebookListItem = ({
       setIsDragOver(false);
     }
   };
-  const handleDrop = (event: React.DragEvent) => {
+  const handleDrop = async (event: React.DragEvent) => {
     setIsDragOver(false);
     const noteId = parseInt(event.dataTransfer.getData("note/id"));
     const notebookId = notebook.id;
     if (!isNaN(noteId)) {
-      notes.moveToNotebook(noteId, notebookId);
+      await notes.moveToNotebook(noteId, notebookId);
       if (selectedNotebook) {
         notes.refresh();
       }

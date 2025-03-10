@@ -1,13 +1,12 @@
 // src/components/NoteLists/BaseNoteForm.tsx
 import { Button, Typography } from "@mui/material";
 import { SubmitHandler } from "react-hook-form";
-import { useContext } from "react";
-import { NoteFilterContext } from "./NoteFilterContext";
 import { NoteFormData, noteFormSchema } from "../../types/notes";
 import { FormProviderWrapper } from "../forms/FromPrividerWrapper";
 import { FormInput } from "../forms/FromInput";
 import { TypeSelect } from "../forms/TypeSelect";
 import { TagInput } from "../forms/TagInput";
+import { useData } from "@/data/DataContext";
 
 interface Props {
   onSubmit: SubmitHandler<NoteFormData>;
@@ -22,7 +21,7 @@ const BaseNoteForm = ({
   submitButtonText,
   formTitle,
 }: Props) => {
-  const { setTagsDirty } = useContext(NoteFilterContext);
+  const { tags } = useData();
 
   return (
     <FormProviderWrapper<NoteFormData>
@@ -35,7 +34,7 @@ const BaseNoteForm = ({
             onSubmit(data);
             const tagsChanged =
               JSON.stringify(data.tags) !== JSON.stringify(defaultValues.tags);
-            if (tagsChanged) setTagsDirty();
+            if (tagsChanged) tags.fetch();
             reset(defaultValues);
           })}
         >

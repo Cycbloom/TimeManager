@@ -1,14 +1,14 @@
 import { useContext } from "react";
 import { NoteFormData, Note } from "../../types";
 import BaseNoteForm from "./BaseNoteForm";
-import { NoteFilterContext } from "./NoteFilterContext";
+import { NotebookContext } from "./NotebookContext";
 
 interface Props {
   onAddNote: (data: Note) => void;
 }
 
 const NoteForm = ({ onAddNote }: Props) => {
-  const { selectedNotebook } = useContext(NoteFilterContext);
+  const { selectedNotebook } = useContext(NotebookContext);
 
   const onSubmit = (data: NoteFormData) => {
     onAddNote({

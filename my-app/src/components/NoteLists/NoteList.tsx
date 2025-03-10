@@ -1,18 +1,15 @@
 //src/components/NoteLists/NoteList.tsx
 import { List, Typography, Divider } from "@mui/material";
 import { useState } from "react";
-import { Note } from "../../types/notes";
+import { Note, NoteQuery, NoteType, Tag } from "../../types/notes";
 import NoteItem from "./NoteItem";
 import EditNoteDialog from "./EditNoteDialog";
-import NoteSelector from "./NoteSelector";
+import NoteSelector, { NoteFilterFormData } from "./NoteSelector";
+import { useData } from "@/data/DataContext";
 
-interface Props {
-  notes: Note[];
-  onUpdate: (note: Note) => void;
-  onDelete: (noteId: number) => void;
-}
+const NoteList = () => {
+  const { notes } = useData();
 
-const NoteList = ({ notes, onDelete, onUpdate }: Props) => {
   const [editingNote, setEditingNote] = useState<Note | null>(null);
 
   const handleEditClick = (note: Note) => {
@@ -20,7 +17,7 @@ const NoteList = ({ notes, onDelete, onUpdate }: Props) => {
   };
 
   const handleUpdate = (updatedNote: Note) => {
-    onUpdate(updatedNote);
+    notes.update(updatedNote);
     setEditingNote(null);
   };
 
@@ -28,30 +25,37 @@ const NoteList = ({ notes, onDelete, onUpdate }: Props) => {
     setEditingNote(null);
   };
 
-  if (notes.length === 0) {
-    return (
-      <>
-        <NoteSelector />
-        <Typography>No notes available.</Typography>
-      </>
-    );
-  }
+  const handleFilterChange = (
+    filters: NoteFilterFormData & { notebookId: number | null }
+  ) => {
+    const noteQuery: NoteQuery = {
+      queryType: filters.type as NoteType,
+      queryTags: filters.tags.map((tag: Tag) => tag.id),
+      queryNotebook: filters.notebookId,
+    };
+
+    notes.fetch(noteQuery);
+  };
 
   return (
     <>
-      <NoteSelector />
-      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-        {notes.map((note, index) => (
-          <div key={note.id}>
-            <NoteItem
-              note={note}
-              onEdit={handleEditClick}
-              onDelete={onDelete}
-            />
-            {index < notes.length - 1 && <Divider component="li" />}
-          </div>
-        ))}
-      </List>
+      <NoteSelector onFilterChange={handleFilterChange} />
+      {notes.data.length > 0 ? (
+        <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+          {notes.data.map((note, index) => (
+            <div key={note.id}>
+              <NoteItem
+                note={note}
+                onEdit={handleEditClick}
+                onDelete={notes.delete}
+              />
+              {index < notes.data.length - 1 && <Divider component="li" />}
+            </div>
+          ))}
+        </List>
+      ) : (
+        <Typography>No notes available.</Typography>
+      )}
       {editingNote && (
         <EditNoteDialog
           open={!!editingNote}
