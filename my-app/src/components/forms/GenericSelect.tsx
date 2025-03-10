@@ -1,10 +1,11 @@
 // src/components/forms/GenericSelect.tsx
 import { useFormContext } from "react-hook-form";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { ReactNode } from "react";
 
 export interface SelectOption {
   value: string;
-  label: string;
+  label: ReactNode;
 }
 
 interface GenericSelectProps {
