@@ -3,8 +3,8 @@ import { Button, Typography } from "@mui/material";
 import { SubmitHandler } from "react-hook-form";
 import { useContext } from "react";
 import { NoteFilterContext } from "./NoteFilterContext";
-import { NoteFormData } from "../../types/notes";
-import { FormProviderWrapper } from "./FormPrividerWrapper";
+import { NoteFormData, noteFormSchema } from "../../types/notes";
+import { FormProviderWrapper } from "../forms/FromPrividerWrapper";
 import { FormInput } from "../forms/FromInput";
 import { TypeSelect } from "../forms/TypeSelect";
 import { TagInput } from "../forms/TagInput";
@@ -25,7 +25,10 @@ const BaseNoteForm = ({
   const { setTagsDirty } = useContext(NoteFilterContext);
 
   return (
-    <FormProviderWrapper defaultValues={defaultValues}>
+    <FormProviderWrapper<NoteFormData>
+      defaultValues={defaultValues}
+      schema={noteFormSchema}
+    >
       {({ handleSubmit, reset }) => (
         <form
           onSubmit={handleSubmit((data) => {

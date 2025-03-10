@@ -1,9 +1,9 @@
 import { SubmitHandler } from "react-hook-form";
-import { TaskFormData } from "../../../types/tasks";
+import { TaskFormData, taskFormSchema } from "../../../types/tasks";
 import { Button, Typography } from "@mui/material";
 import { DatePickerField } from "../../forms/DatePickerField";
 import { PrioritySelect } from "../../forms/PrioritySelect";
-import { FormProviderWrapper } from "./FromPrividerWrapper";
+import { FormProviderWrapper } from "../../forms/FromPrividerWrapper";
 import { FormInput } from "../../forms/FromInput";
 import { TagInput } from "../../forms/TagInput";
 
@@ -14,8 +14,22 @@ interface Props {
   formTitle: string;
 }
 
-const BaseTaskForm = ({ onSubmit, submitButtonText, formTitle }: Props) => (
-  <FormProviderWrapper>
+const BaseTaskForm = ({
+  onSubmit,
+  defaultValues = {
+    title: "",
+    dueDate: new Date(),
+    priority: "low",
+    tags: [],
+    estimatedHours: 1,
+  },
+  submitButtonText,
+  formTitle,
+}: Props) => (
+  <FormProviderWrapper<TaskFormData>
+    defaultValues={defaultValues}
+    schema={taskFormSchema}
+  >
     {({ handleSubmit, reset }) => (
       <form
         onSubmit={handleSubmit((data) => {
