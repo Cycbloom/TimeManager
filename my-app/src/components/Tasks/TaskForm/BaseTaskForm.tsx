@@ -19,6 +19,7 @@ const BaseTaskForm = ({
   onSubmit,
   defaultValues = {
     title: "",
+    description: "",
     dueDate: new Date(),
     priority: "low",
     tags: [],

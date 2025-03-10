@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const noteController = require("./controllers/noteController");
 const tagsController = require("./controllers/tagsController");
 const notebookController = require("./controllers/notebookController");
+const taskController = require("./controllers/taskController");
 
 const app = express();
 
@@ -28,6 +29,17 @@ app.delete("/api/notes/:id", noteController.deleteNote);
 app.patch("/api/notes/:id/notebook", noteController.moveToNotebook);
 
 app.get("/api/tags", tagsController.getAllTags);
+
+app.get("/api/tasks", taskController.getAllTasks);
+app.post("/api/tasks", taskController.createTask);
+app.get("/api/tasks/:taskId", taskController.getTaskById);
+app.put("/api/tasks/:taskId", taskController.updateTask);
+app.delete("/api/tasks/:taskId", taskController.deleteTask);
+app.patch("/api/tasks/:taskId/status", taskController.updateTaskStatus); // [^2]
+app.post(
+  "/api/tasks/:taskId/recalculate-priority",
+  taskController.recalculatePriority
+);
 
 // 启动服务器
 const PORT = 5000;
