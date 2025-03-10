@@ -18,7 +18,18 @@ export const taskFormSchema = z.object({
 export type TaskFormData = z.infer<typeof taskFormSchema>;
 
 export interface Task extends TaskFormData {
-  id: string;
+  id: number;
+  bufferTime: number;
+  status: "created" | "ready" | "executing" | "completed";
+  storagePath?: string;
+}
+
+export type TaskStatus = Task["status"];
+
+export interface TaskQuery {
+  status?: TaskStatus;
+  priority?: string;
+  dueDateRange?: [Date, Date];
 }
 
 // src/types/tasks.ts

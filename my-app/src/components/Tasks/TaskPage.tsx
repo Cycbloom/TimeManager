@@ -1,17 +1,10 @@
-import { TaskFormData } from "../../types/tasks";
-import BaseTaskForm from "./TaskForm/BaseTaskForm";
-
+import { DataProvider } from "@/data/DataContext";
+import TaskPageContent from "./TaskPageContent";
 const TaskPage = () => {
-  const onSubmit = (data: TaskFormData) => {
-    console.log(data);
-  };
-
   return (
-    <BaseTaskForm
-      formTitle="创建任务"
-      submitButtonText="创建任务"
-      onSubmit={onSubmit}
-    />
+    <DataProvider>
+      <TaskPageContent />
+    </DataProvider>
   );
 };
 
