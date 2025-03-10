@@ -1,9 +1,10 @@
-// 新建 src/types/tasks.ts
+//  src/types/tasks.ts
 import { z } from "zod";
 import { SelectOption } from "../components/forms/GenericSelect";
 
 export const taskFormSchema = z.object({
   title: z.string().min(1, "标题不能为空"),
+  descriction: z.string().min(1, "描述不能为空"),
   dueDate: z.date(),
   priority: z.enum(["low", "medium", "high"]),
   tags: z.array(z.string()),

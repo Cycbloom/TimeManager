@@ -44,6 +44,7 @@ const BaseTaskForm = ({
           </Typography>
         )}
         <FormInput name="title" label="任务标题" />
+        <FormInput name="description" label="任务描述" multiline />
         <Box display="flex" gap={3} mt={2}>
           <Box flex={1}>
             <DatePickerField name="dueDate" label="截止日期" />
