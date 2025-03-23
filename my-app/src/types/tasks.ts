@@ -27,6 +27,13 @@ export interface Task extends TaskFormData {
 
 export type TaskStatus = Task["status"];
 
+export const statusOptions: SelectOption[] = [
+  { value: "created", label: "已创建" },
+  { value: "ready", label: "就绪" },
+  { value: "executing", label: "执行中" },
+  { value: "completed", label: "已完成" },
+];
+
 export interface TaskQuery {
   status?: TaskStatus;
   priority?: string;
