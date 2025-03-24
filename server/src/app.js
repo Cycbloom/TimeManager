@@ -1,30 +1,30 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const notebookRouter = require('./router/notebookRouter');
+const pool = require('./config/postgres');
 
-app.get("/", (req, res) => {
-  res.send("Docker 后端已启动 🐳");
+// 解析 JSON 数据的中间件
+app.use(express.json());
+
+// 连接数据库
+pool.connect((err, client, release) => {
+    if (err) {
+        console.error('Error connecting to the database', err);
+    } else {
+        console.log('Connected to the database');
+        release();
+    }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.use(notebookRouter);
+
+// 错误处理中间件
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).json({ error: 'Something went wrong' });
 });
 
-// 添加 PostgreSQL 连接测试
-const { Pool } = require("pg");
-const pool = new Pool({
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: process.env.PG_DATABASE,
-  password: process.env.PG_PASSWORD,
-  port: 5432,
-});
-
-app.get("/db-test", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-    res.json({ dbTime: result.rows[0].now });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
