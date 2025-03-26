@@ -1,16 +1,6 @@
-import { CreateData, UpdateData } from "./model";
-
 export interface INotebook {
-  id: number;
+  id: { _brand: "id"; value: number };
   name: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface NotebookCreateData extends CreateData {
-  name: string;
-}
-
-export interface NotebookUpdateData extends UpdateData {
-  name: string;
+  created_at: { _brand: "created_at"; value: Date };
+  updated_at: { _brand: "updated_at"; value: Date };
 }

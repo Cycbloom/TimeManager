@@ -1,17 +1,9 @@
 import BaseModel from "./BaseModel";
-import { NotebookCreateData, NotebookUpdateData } from "../types/notebook";
+import { INotebook } from "../types/notebook";
 
-class Notebook extends BaseModel {
+class Notebook extends BaseModel<INotebook> {
   constructor() {
     super("notebooks");
-  }
-
-  async create(data: NotebookCreateData) {
-    return super.create(data);
-  }
-
-  async update(id: number, data: NotebookUpdateData) {
-    return super.update(id, data);
   }
 }
 

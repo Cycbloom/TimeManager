@@ -1,7 +1,7 @@
 import pool from "../config/postgres";
 import { QueryParams, CreateData, UpdateData } from "../types/model";
 
-class BaseModel {
+class BaseModel<T> {
   protected tableName: string;
   constructor(tableName: string) {
     this.tableName = tableName;
@@ -52,7 +52,7 @@ class BaseModel {
     return result.rows;
   }
 
-  async create(data: CreateData) {
+  async create(data: CreateData<T>) {
     const columns = Object.keys(data);
     const values = Object.values(data);
     const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
@@ -65,7 +65,7 @@ class BaseModel {
     return result.rows[0];
   }
 
-  async update(id: number, data: UpdateData) {
+  async update(id: number, data: UpdateData<T>) {
     const columns = Object.keys(data);
     const values = Object.values(data);
     const setClause = columns

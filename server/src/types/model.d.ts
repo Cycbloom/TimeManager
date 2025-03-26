@@ -5,10 +5,16 @@ export interface QueryParams {
   [key: string]: any;
 }
 
-export interface CreateData {
+// 创建数据接口，必须通过泛型参数指定具体模型类型
+export type CreateData<T> = {
+  [P in keyof T]: T[P] extends { _brand?: any } ? never : T[P];
+} & {
   [key: string]: any;
-}
+};
 
-export interface UpdateData {
+// 更新数据接口，所有字段都是可选的
+export type UpdateData<T> = {
+  [P in keyof T]?: T[P] extends { _brand?: any } ? never : T[P];
+} & {
   [key: string]: any;
-}
+};
