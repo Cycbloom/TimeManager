@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const notebookRouter = require("./router/notebookRouter");
+const tagRouter = require("./router/tagrouter");
 const pool = require("./config/postgres");
 const schemaManager = require("./schema/schemaManager");
 
@@ -25,7 +26,8 @@ pool.connect(async (err, client, release) => {
   }
 });
 
-app.use(notebookRouter);
+app.use("/api/notebooks", notebookRouter);
+app.use("/api/tags", tagRouter);
 
 // 错误处理中间件
 app.use((err, req, res, next) => {
