@@ -1,11 +1,13 @@
-const pool = require("../config/postgres");
+import pool from "../config/postgres";
+import { QueryParams, CreateData, UpdateData } from "../types/model";
 
 class BaseModel {
-  constructor(tableName) {
+  protected tableName: string;
+  constructor(tableName: string) {
     this.tableName = tableName;
   }
 
-  async find(query = {}) {
+  async find(query: QueryParams = {}) {
     let sqlQuery = `SELECT * FROM ${this.tableName}`;
     const values = [];
     let paramCount = 0;
@@ -50,7 +52,7 @@ class BaseModel {
     return result.rows;
   }
 
-  async create(data) {
+  async create(data: CreateData) {
     const columns = Object.keys(data);
     const values = Object.values(data);
     const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
@@ -63,7 +65,7 @@ class BaseModel {
     return result.rows[0];
   }
 
-  async update(id, data) {
+  async update(id: number, data: UpdateData) {
     const columns = Object.keys(data);
     const values = Object.values(data);
     const setClause = columns
@@ -79,7 +81,7 @@ class BaseModel {
     return result.rows[0];
   }
 
-  async delete(id) {
+  async delete(id: number) {
     const result = await pool.query(
       `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`,
       [id]
@@ -88,4 +90,4 @@ class BaseModel {
   }
 }
 
-module.exports = BaseModel;
+export default BaseModel;

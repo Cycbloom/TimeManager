@@ -1,0 +1,7 @@
+{
+  "watch": ["src"],
+  "ext": ".ts,.js",
+  "ignore": [".git", "node_modules"],
+  "exec": "ts-node ./src/app.js",
+  "delay": "1000"
+}

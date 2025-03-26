@@ -6,6 +6,7 @@ const getAllNotebooks = async (req, res) => {
     const notebooks = await notebookService.getAllNotebooks();
     res.json(notebooks);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "获取所有笔记本失败" });
   }
 };

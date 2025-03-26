@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon --legacy-watch --watch src src/app.js"
+    "start": "ts-node src/app.js",
+    "dev": "nodemon --legacy-watch"
   },
   "keywords": [],
   "author": "",
