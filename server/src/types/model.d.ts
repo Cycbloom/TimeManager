@@ -12,6 +12,10 @@ export type CreateData<T> = {
   [key: string]: any;
 };
 
+export type RemoveBrand<T> = {
+  [K in keyof T]: T[K] extends { _brand: string; value: infer U } ? U : T[K];
+};
+
 // 更新数据接口，所有字段都是可选的
 export type UpdateData<T> = {
   [P in keyof T]?: T[P] extends { _brand?: any } ? never : T[P];

@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
 const notebookRouter = require("./router/notebookRouter");
-const tagRouter = require("./router/tagrouter");
+const tagRouter = require("./router/tagRouter");
+const noteRouter = require("./router/noteRouter");
 const pool = require("./config/postgres");
 const schemaManager = require("./schema/schemaManager");
+const mongoSchemaManager = require("./schema/mongoSchemaManager");
 
 // 解析 JSON 数据的中间件
 app.use(express.json());
@@ -24,10 +26,19 @@ pool.connect(async (err, client, release) => {
     console.error("Error syncing database schemas:", error);
     process.exit(1);
   }
+
+  try {
+    await mongoSchemaManager.syncAllSchemas();
+    console.log("MongoDB schemas synced successfully");
+  } catch (error) {
+    console.error("Error syncing MongoDB schemas:", error);
+    process.exit(1);
+  }
 });
 
 app.use("/api/notebooks", notebookRouter);
 app.use("/api/tags", tagRouter);
+app.use("/api/notes", noteRouter);
 
 // 错误处理中间件
 app.use((err, req, res, next) => {
