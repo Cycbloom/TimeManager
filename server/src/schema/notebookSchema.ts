@@ -1,4 +1,7 @@
-const notebookSchema = {
+import { INotebook } from "../types/notebook";
+import { ISchema } from "../types/schema";
+
+const notebookSchema: ISchema<INotebook> = {
   tableName: "notebooks",
   fields: {
     id: {
@@ -20,4 +23,4 @@ const notebookSchema = {
   },
 };
 
-module.exports = notebookSchema;
+export default notebookSchema;

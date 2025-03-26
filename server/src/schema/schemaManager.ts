@@ -1,7 +1,12 @@
-const pool = require("../config/postgres");
-const notebookSchema = require("./notebookSchema");
+import { Pool } from "pg";
+import { ISchema, ISchemaMap } from "../types/schema";
+import pool from "../config/postgres";
+import notebookSchema from "./notebookSchema";
 
 class SchemaManager {
+  private schemas: Partial<ISchemaMap>;
+  private isDevelopment: boolean;
+
   constructor() {
     this.schemas = {
       notebooks: notebookSchema,
@@ -9,7 +14,7 @@ class SchemaManager {
     this.isDevelopment = process.env.NODE_ENV === "development";
   }
 
-  async syncSchema(schemaName) {
+  async syncSchema(schemaName: keyof ISchemaMap): Promise<void> {
     const schema = this.schemas[schemaName];
     if (!schema) {
       throw new Error(`Schema ${schemaName} not found`);
@@ -27,7 +32,7 @@ class SchemaManager {
       }
     }
 
-    const columns = [];
+    const columns: string[] = [];
 
     for (const [fieldName, fieldDef] of Object.entries(fields)) {
       let columnDef = `${fieldName} ${fieldDef.type}`;
@@ -60,8 +65,10 @@ class SchemaManager {
     }
   }
 
-  async syncAllSchemas() {
-    for (const schemaName of Object.keys(this.schemas)) {
+  async syncAllSchemas(): Promise<void> {
+    for (const schemaName of Object.keys(this.schemas) as Array<
+      keyof ISchemaMap
+    >) {
       await this.syncSchema(schemaName);
     }
   }
