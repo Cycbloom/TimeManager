@@ -1,5 +1,6 @@
 import { INotebook } from "./notebook";
 import { ITag } from "./tag";
+import { INoteTag } from "./note_tag";
 
 export interface IField {
   type: string;
@@ -20,4 +21,5 @@ export interface ISchema<T = any> {
 export interface ISchemaMap {
   notebooks: ISchema<INotebook>;
   tags: ISchema<ITag>;
+  note_tags: ISchema<INoteTag>;
 }

@@ -3,6 +3,7 @@ import { ISchema, ISchemaMap } from "../types/schema";
 import pool from "../config/postgres";
 import notebookSchema from "./notebookSchema";
 import tagSchema from "./tagSchema";
+import noteTagSchema from "./noteTagSchema";
 
 class SchemaManager {
   private schemas: Partial<ISchemaMap>;
@@ -12,6 +13,7 @@ class SchemaManager {
     this.schemas = {
       notebooks: notebookSchema,
       tags: tagSchema,
+      note_tags: noteTagSchema,
     };
     this.isDevelopment = process.env.NODE_ENV === "development";
   }
