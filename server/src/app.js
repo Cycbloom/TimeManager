@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const notebookRouter = require("./router/notebookRouter");
 const tagRouter = require("./router/tagRouter");
@@ -6,6 +7,15 @@ const noteRouter = require("./router/noteRouter");
 const pool = require("./config/postgres");
 const schemaManager = require("./schema/schemaManager");
 const mongoSchemaManager = require("./schema/mongoSchemaManager");
+
+// 配置CORS中间件
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // 解析 JSON 数据的中间件
 app.use(express.json());

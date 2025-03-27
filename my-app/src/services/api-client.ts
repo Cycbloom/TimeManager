@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://localhost:5000", // 添加协议
+  baseURL: "http://localhost:3000",
 });

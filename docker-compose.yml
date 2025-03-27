@@ -1,11 +1,11 @@
 services:
-  app:
-    build: .
+  server:
+    build: ./server
     ports:
       - "3000:3000"
       - "9229:9229"
     volumes:
-      - .:/app
+      - ./server:/app
     environment:
       - PG_HOST=postgres
       - PG_USER=postgres
@@ -20,6 +20,18 @@ services:
         condition: service_healthy
       mongo:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./my-app:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
 
   postgres:
     image: postgres:15-alpine
@@ -48,3 +60,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 2
+
+volumes:
+  node_modules:
