@@ -37,7 +37,7 @@
                             "value": "application/json"
                         }
                     ],
-                    "body": "[{\"id\": 1, \"title\": \"Sample Note\", \"content\": \"Content\", \"tags\": [\"work\", \"important\"]}]"
+                    "body": "[{\"id\": 1, \"title\": \"Sample Note\", \"content\": \"Content\", \"type\": \"article\", \"tags\": [\"work\", \"important\"]}]"
                 }
             ]
         },
@@ -73,7 +73,7 @@
                             "value": "application/json"
                         }
                     ],
-                    "body": "{\"id\": 1, \"title\": \"Sample Note\", \"content\": \"Content\", \"tags\": [\"work\", \"important\"]}"
+                    "body": "{\"id\": 1, \"title\": \"Sample Note\", \"content\": \"Content\", \"type\": \"problem\", \"tags\": [\"work\", \"important\"]}"
                 }
             ]
         },
@@ -89,7 +89,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\"title\": \"New Note\", \"content\": \"This is a new note\", \"tags\": [\"work\", \"project\"]}"
+                    "raw": "{\"title\": \"New Note\", \"content\": \"This is a new note\", \"type\": \"solution\", \"tags\": [\"work\", \"project\"]}"
                 },
                 "url": {
                     "raw": "http://localhost:3000/api/notes",
@@ -112,7 +112,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\": \"New Note\", \"content\": \"This is a new note\", \"tags\": [\"work\", \"project\"]}"
+                            "raw": "{\"title\": \"New Note\", \"content\": \"This is a new note\", \"type\": \"solution\", \"tags\": [\"work\", \"project\"]}"
                         },
                         "url": {
                             "raw": "http://localhost:3000/api/notes"
@@ -127,7 +127,7 @@
                             "value": "application/json"
                         }
                     ],
-                    "body": "{\"id\": 2, \"title\": \"New Note\", \"content\": \"This is a new note\", \"tags\": [\"work\", \"project\"]}"
+                    "body": "{\"id\": 2, \"title\": \"New Note\", \"content\": \"This is a new note\", \"type\": \"solution\", \"tags\": [\"work\", \"project\"]}"
                 }
             ]
         },
@@ -143,7 +143,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\"title\": \"Updated Note\", \"content\": \"This note has been updated\", \"tags\": [\"urgent\"]}"
+                    "raw": "{\"title\": \"Updated Note\", \"content\": \"This note has been updated\", \"type\": \"reference\", \"tags\": [\"urgent\"]}"
                 },
                 "url": {
                     "raw": "http://localhost:3000/api/notes/1",
@@ -166,7 +166,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\": \"Updated Note\", \"content\": \"This note has been updated\", \"tags\": [\"urgent\"]}"
+                            "raw": "{\"title\": \"Updated Note\", \"content\": \"This note has been updated\", \"type\": \"reference\", \"tags\": [\"urgent\"]}"
                         },
                         "url": {
                             "raw": "http://localhost:3000/api/notes/1"
@@ -181,7 +181,7 @@
                             "value": "application/json"
                         }
                     ],
-                    "body": "{\"id\": 1, \"title\": \"Updated Note\", \"content\": \"This note has been updated\", \"tags\": [\"urgent\"]}"
+                    "body": "{\"id\": 1, \"title\": \"Updated Note\", \"content\": \"This note has been updated\", \"type\": \"reference\", \"tags\": [\"urgent\"]}"
                 }
             ]
         },

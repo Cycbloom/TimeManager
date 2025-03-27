@@ -5,6 +5,11 @@ import { INote } from "../types/note";
 const noteSchema = new Schema<RemoveBrand<INote>>({
   title: { type: String, required: true },
   content: { type: String, required: true },
+  type: {
+    type: String,
+    enum: ["article", "problem", "solution", "reference"],
+    required: true,
+  },
   created_at: {
     type: Date,
     default: Date.now,
