@@ -6,6 +6,10 @@ export interface IField {
   primaryKey?: boolean;
   notNull?: boolean;
   default?: string;
+  foreignKey?: {
+    table: string;
+    field: string;
+  };
 }
 
 export interface ISchema<T = any> {

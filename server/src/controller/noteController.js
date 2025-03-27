@@ -38,7 +38,7 @@ class NoteController {
       const { id } = req.params;
       const noteData = req.body;
       const result = await noteService.updateNote(id, noteData);
-      if (result.modifiedCount === 0) {
+      if (!result) {
         return res.status(404).json({ error: "Note not found" });
       }
       res.json(result);

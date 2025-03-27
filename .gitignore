@@ -42,3 +42,5 @@ yarn-error.log*
 
 # System Files
 Thumbs.db 
+
+**/mongo_data/**

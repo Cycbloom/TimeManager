@@ -3,6 +3,8 @@ import { QueryParams, CreateData, UpdateData } from "../types/model";
 
 class BaseModel<T> {
   protected tableName: string;
+  protected hasCreatedAt: T extends { created_at: Date } ? true : false;
+  protected hasUpdatedAt: T extends { updated_at: Date } ? true : false;
   constructor(tableName: string) {
     this.tableName = tableName;
   }
@@ -33,7 +35,7 @@ class BaseModel<T> {
       sqlQuery += ` ORDER BY ${field} ${
         direction?.toUpperCase() === "DESC" ? "DESC" : "ASC"
       }`;
-    } else {
+    } else if (this.hasCreatedAt) {
       sqlQuery += ` ORDER BY created_at DESC`;
     }
 
@@ -71,10 +73,11 @@ class BaseModel<T> {
     const setClause = columns
       .map((col, index) => `${col} = $${index + 1}`)
       .join(", ");
+    const updateDateClause = `, updated_at = CURRENT_TIMESTAMP`;
 
     const result = await pool.query(
       `UPDATE ${this.tableName} 
-             SET ${setClause}, updated_at = CURRENT_TIMESTAMP 
+             SET ${setClause} ${this.hasUpdatedAt ? updateDateClause : ""}
              WHERE id = $${columns.length + 1} RETURNING *`,
       [...values, id]
     );
