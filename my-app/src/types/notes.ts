@@ -54,7 +54,7 @@ export type NoteFormData = z.infer<typeof noteFormSchema>;
 export interface NoteQuery extends QueryParams {
   type?: NoteType | null;
   tags?: number[];
-  notebook?: number | null;
+  notebook_id?: number | null;
 }
 
 // 通用响应类型

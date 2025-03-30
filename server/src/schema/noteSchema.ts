@@ -10,6 +10,7 @@ const noteSchema = new Schema<RemoveBrand<INote>>({
     enum: ["article", "problem", "solution", "reference"],
     required: true,
   },
+  notebook_id: { type: Number, required: false },
   created_at: {
     type: Date,
     default: Date.now,

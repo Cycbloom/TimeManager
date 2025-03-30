@@ -10,6 +10,7 @@ export interface INote {
   title: string;
   content: string;
   type: NoteType;
+  notebook_id: number | null;
   created_at: { _brand: "timestamp"; value: Date };
   updated_at: { _brand: "timestamp"; value: Date };
 }
