@@ -1,6 +1,6 @@
 // src/data/DataContext.tsx
 import { createContext, useContext } from "react";
-import { createNotesSlice, NotesSlice } from "./notes";
+import { createNotesSlice, NotesSlice } from "./noteSlice";
 import { createNotebooksSlice, NotebooksSlice } from "./notebooks";
 import { createTagsSlice, tagsSlice } from "./tags";
 import { createTasksSlice, TasksSlice } from "./tasks";

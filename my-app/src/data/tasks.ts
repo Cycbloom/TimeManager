@@ -1,7 +1,7 @@
 // src/data/tasks.ts
 import { createDataSlice } from "./DataSlice";
 import { Task, TaskQuery, TaskStatus } from "@/types/tasks";
-import apiClient from "../services/api-client";
+import apiClient from "../utils/api-client";
 
 export function createTasksSlice() {
   const baseSlice = createDataSlice<Task, TaskQuery>({

@@ -17,7 +17,7 @@ const NoteList = () => {
   };
 
   const handleUpdate = (updatedNote: Note) => {
-    notes.update(updatedNote);
+    notes.update(updatedNote.id, updatedNote);
     setEditingNote(null);
   };
 
@@ -29,9 +29,9 @@ const NoteList = () => {
     filters: NoteFilterFormData & { notebookId: number | null }
   ) => {
     const noteQuery: NoteQuery = {
-      queryType: filters.type as NoteType,
-      queryTags: filters.tags.map((tag: Tag) => tag.id),
-      queryNotebook: filters.notebookId,
+      type: filters.type as NoteType,
+      tags: filters.tags.map((tag: Tag) => tag.id),
+      notebook: filters.notebookId,
     };
 
     notes.fetch(noteQuery);

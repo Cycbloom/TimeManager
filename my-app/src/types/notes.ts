@@ -1,6 +1,7 @@
 // src/types/notes.ts
 import { z } from "zod";
 import { SelectOption } from "../components/forms/GenericSelect";
+import { QueryParams } from "./model";
 
 // 核心笔记类型
 export interface Note {
@@ -10,16 +11,16 @@ export interface Note {
   type: NoteType;
   tags: string[];
   notebook_id: number | null;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // 笔记本类型
 export interface Notebook {
   id: number;
   name: string;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date;
+  updated_at?: Date;
   note_count?: number; // 用于关联查询
 }
 
@@ -27,6 +28,8 @@ export interface Notebook {
 export interface Tag {
   id: number;
   name: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Zod 相关类型定义
@@ -45,14 +48,13 @@ export const noteFormSchema = z.object({
   type: noteTypeEnum,
   tags: z.array(z.string()),
 });
-
 export type NoteFormData = z.infer<typeof noteFormSchema>;
 
 // 笔记查询参数
-export interface NoteQuery {
-  queryType: NoteType | null;
-  queryTags: number[];
-  queryNotebook: number | null;
+export interface NoteQuery extends QueryParams {
+  type?: NoteType | null;
+  tags?: number[];
+  notebook?: number | null;
 }
 
 // 通用响应类型

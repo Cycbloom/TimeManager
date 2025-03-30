@@ -1,6 +1,7 @@
 //  src/types/tasks.ts
 import { z } from "zod";
 import { SelectOption } from "../components/forms/GenericSelect";
+import { QueryParams } from "./model";
 
 export const taskFormSchema = z.object({
   title: z.string().min(1, "标题不能为空"),
@@ -34,7 +35,7 @@ export const statusOptions: SelectOption[] = [
   { value: "completed", label: "已完成" },
 ];
 
-export interface TaskQuery {
+export interface TaskQuery extends QueryParams {
   status?: TaskStatus;
   priority?: string;
   dueDateRange?: [Date, Date];

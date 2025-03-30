@@ -1,25 +1,27 @@
 import { useCallback, useState } from "react";
-import apiClient from "../services/api-client";
-
-// 基础类型定义
-export interface BaseEntity {
-  id: number;
-}
+import apiClient from "../utils/api-client";
+import { QueryParams, BaseEntity } from "../types/model";
 
 // 通用请求配置类型
-interface DataRequestConfig<TQuery = unknown> {
+interface DataRequestConfig<TQuery extends QueryParams = QueryParams> {
   endpoint: string;
   initialQuery?: TQuery;
 }
 
 // 通用数据切片类型
-interface DataSlice<T extends BaseEntity, TQuery = unknown> {
+interface DataSlice<
+  T extends BaseEntity,
+  TQuery extends QueryParams = QueryParams
+> {
   data: T[];
   error: string;
   loading: boolean;
   fetch: (query?: TQuery) => Promise<void>;
-  create: (item: Omit<T, "id">) => Promise<void>;
-  update: (item: T) => Promise<void>;
+  create: (item: Omit<T, keyof BaseEntity>) => Promise<void>;
+  update: (
+    id: number,
+    item: Partial<Omit<T, keyof BaseEntity>>
+  ) => Promise<void>;
   delete: (id: number) => Promise<void>;
 
   //缓存功能
@@ -32,9 +34,10 @@ interface DataSlice<T extends BaseEntity, TQuery = unknown> {
 }
 
 // 创建通用数据切片的工厂函数
-export function createDataSlice<T extends BaseEntity, TQuery = unknown>(
-  config: DataRequestConfig<TQuery>
-): DataSlice<T, TQuery> {
+export function createDataSlice<
+  T extends BaseEntity,
+  TQuery extends QueryParams = QueryParams
+>(config: DataRequestConfig<TQuery>): DataSlice<T, TQuery> {
   const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -58,43 +61,42 @@ export function createDataSlice<T extends BaseEntity, TQuery = unknown>(
     }
   };
 
-  const fetch = useCallback(
-    async (query?: TQuery) => {
-      const effectiveQuery = query ?? currentQuery;
-
-      await handleRequest(
-        () =>
-          apiClient.get<{ results: T[] }>(config.endpoint, { params: query }),
-        (response) => {
-          setData(response.data.results);
-          setCurrentQuery(effectiveQuery);
-        }
-      );
-    },
-    [currentQuery]
-  );
+  const fetch = useCallback(async (query?: TQuery) => {
+    await handleRequest(
+      () => apiClient.get<T[]>(config.endpoint, { params: query }),
+      (response) => {
+        setData(response.data);
+        setCurrentQuery(query);
+      }
+    );
+  }, []);
 
   const refresh = useCallback(async () => {
-    if (!currentQuery) return;
-    await fetch(currentQuery);
-  }, [currentQuery, fetch]);
+    await handleRequest(
+      () => apiClient.get<T[]>(config.endpoint, { params: currentQuery || {} }),
+      (response) => {
+        setData(response.data);
+      }
+    );
+  }, [currentQuery]);
 
-  const create = useCallback(async (item: Omit<T, "id">) => {
+  const create = useCallback(async (item: Omit<T, keyof BaseEntity>) => {
     return handleRequest(
       () => apiClient.post<T>(config.endpoint, item),
       (response) => setData((prev) => [response.data, ...prev])
     );
   }, []);
 
-  const update = useCallback(async (item: T) => {
-    await handleRequest(
-      () => apiClient.put<T>(`${config.endpoint}/${item.id}`, item),
-      (response) =>
-        setData((prev) =>
-          prev.map((i) => (i.id === item.id ? response.data : i))
-        )
-    );
-  }, []);
+  const update = useCallback(
+    async (id: number, item: Partial<Omit<T, keyof BaseEntity>>) => {
+      await handleRequest(
+        () => apiClient.put<T>(`${config.endpoint}/${id}`, item),
+        (response) =>
+          setData((prev) => prev.map((i) => (i.id === id ? response.data : i)))
+      );
+    },
+    []
+  );
 
   const deleteItem = useCallback(async (id: number) => {
     await handleRequest(
@@ -119,7 +121,7 @@ export function createDataSlice<T extends BaseEntity, TQuery = unknown>(
 }
 
 // 使用Omit隐藏内部方法
-export type PublicDataSlice<T extends BaseEntity, TQuery = unknown> = Omit<
-  DataSlice<T, TQuery>,
-  "_setData" | "_setError"
->;
+export type PublicDataSlice<
+  T extends BaseEntity,
+  TQuery extends QueryParams = QueryParams
+> = Omit<DataSlice<T, TQuery>, "_setData" | "_setError">;

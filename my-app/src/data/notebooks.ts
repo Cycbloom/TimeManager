@@ -1,7 +1,7 @@
 // src/data/notebooks.ts
 import { createDataSlice } from "./DataSlice";
 import { Notebook } from "../types/notes";
-import apiClient from "../services/api-client";
+import apiClient from "../utils/api-client";
 
 export function createNotebooksSlice() {
   const baseSlice = createDataSlice<Notebook>({ endpoint: "/api/notebooks" });
