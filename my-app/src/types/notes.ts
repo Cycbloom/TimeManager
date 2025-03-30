@@ -5,7 +5,7 @@ import { QueryParams } from "./model";
 
 // 核心笔记类型
 export interface Note {
-  id: number;
+  id: string;
   title: string;
   content: string;
   type: NoteType;

@@ -8,9 +8,9 @@ export function createNotesSlice() {
     endpoint: "/api/notes",
   });
 
-  const moveToNotebook = async (noteId: number, notebookId: number) => {
+  const moveToNotebook = async (noteId: string, notebookId: number | null) => {
     try {
-      await apiClient.patch(`/api/notes/${noteId}/notebook`, { notebookId });
+      await apiClient.put(`/api/notes/${noteId}`, { notebook_id: notebookId });
       baseSlice._setData((prev) =>
         prev.map((note) =>
           note.id === noteId ? { ...note, notebook_id: notebookId } : note

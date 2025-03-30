@@ -3,16 +3,17 @@ import { ListItem, ListItemText, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Note } from "../../types/notes";
+import { logger } from "@/utils/logger";
 
 interface Props {
   note: Note;
   onEdit: (note: Note) => void;
-  onDelete: (noteId: number) => void;
+  onDelete: (noteId: string) => void;
 }
 
 const NoteItem = ({ note, onEdit, onDelete }: Props) => {
   const handleDragStart = (event: React.DragEvent) => {
-    event.dataTransfer.setData("note/id", note.id.toString());
+    event.dataTransfer.setData("note/id", note.id);
     event.currentTarget.classList.add("dragging");
   };
   const handleDragEnd = (event: React.DragEvent) => {

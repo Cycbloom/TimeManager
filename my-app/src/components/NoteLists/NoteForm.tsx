@@ -4,7 +4,7 @@ import BaseNoteForm from "./BaseNoteForm";
 import { NotebookContext } from "./NotebookContext";
 
 interface Props {
-  onAddNote: (data: Note) => void;
+  onAddNote: (data: Omit<Note, "id">) => void;
 }
 
 const NoteForm = ({ onAddNote }: Props) => {
@@ -12,7 +12,6 @@ const NoteForm = ({ onAddNote }: Props) => {
 
   const onSubmit = (data: NoteFormData) => {
     onAddNote({
-      id: 0, // ID 由后端生成
       ...data,
       notebook_id: selectedNotebook,
     });

@@ -10,6 +10,7 @@ import { Notebook } from "../../../types/notes";
 import { useContext, useState } from "react";
 import { useData } from "../../../data/DataContext";
 import { NotebookContext } from "../NotebookContext";
+import { logger } from "@/utils/logger";
 
 interface NotebookListItemProps {
   notebook: Notebook;
@@ -46,9 +47,9 @@ const NotebookListItem = ({
   };
   const handleDrop = async (event: React.DragEvent) => {
     setIsDragOver(false);
-    const noteId = parseInt(event.dataTransfer.getData("note/id"));
+    const noteId = event.dataTransfer.getData("note/id");
     const notebookId = notebook.id;
-    if (!isNaN(noteId)) {
+    if (noteId) {
       await notes.moveToNotebook(noteId, notebookId);
       if (selectedNotebook) {
         notes.refresh();

@@ -7,7 +7,7 @@ export interface QueryParams {
 
 // 基础类型定义
 export interface BaseEntity {
-  id: number;
+  id: number | string;
   created_at?: Date;
   updated_at?: Date;
 }

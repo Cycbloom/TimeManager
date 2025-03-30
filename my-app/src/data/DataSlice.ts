@@ -19,10 +19,10 @@ interface DataSlice<
   fetch: (query?: TQuery) => Promise<void>;
   create: (item: Omit<T, keyof BaseEntity>) => Promise<void>;
   update: (
-    id: number,
+    id: string | number,
     item: Partial<Omit<T, keyof BaseEntity>>
   ) => Promise<void>;
-  delete: (id: number) => Promise<void>;
+  delete: (id: string | number) => Promise<void>;
 
   //缓存功能
   currentQuery: TQuery | undefined;
@@ -88,7 +88,7 @@ export function createDataSlice<
   }, []);
 
   const update = useCallback(
-    async (id: number, item: Partial<Omit<T, keyof BaseEntity>>) => {
+    async (id: string | number, item: Partial<Omit<T, keyof BaseEntity>>) => {
       await handleRequest(
         () => apiClient.put<T>(`${config.endpoint}/${id}`, item),
         (response) =>
@@ -98,7 +98,7 @@ export function createDataSlice<
     []
   );
 
-  const deleteItem = useCallback(async (id: number) => {
+  const deleteItem = useCallback(async (id: string | number) => {
     await handleRequest(
       () => apiClient.delete(`${config.endpoint}/${id}`),
       () => setData((prev) => prev.filter((i) => i.id !== id))
