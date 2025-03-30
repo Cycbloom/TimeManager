@@ -27,17 +27,25 @@ const deleteTag = async (id) => {
 };
 
 // 处理笔记的标签
+// 根据标签名数组获取标签ID数组
+const getTagIdsByNames = async (tags) => {
+  if (!tags || tags.length === 0) return [];
+
+  const tagObjects = await Promise.all(
+    tags.map((tagName) => TagModel.findOrCreateByName(tagName))
+  );
+  return tagObjects.map((tag) => tag.id);
+};
+
+// 处理笔记的标签
 const handleNoteTags = async (noteId, tags) => {
-  let tagObjects = [];
   if (tags && tags.length > 0) {
-    // 将标签名转换为标签对象（包含id）
-    tagObjects = await Promise.all(
-      tags.map((tagName) => TagModel.findOrCreateByName(tagName))
-    );
+    // 获取标签ID
+    const tagIds = await getTagIdsByNames(tags);
     // 先删除原有标签关联，再创建新的关联
     await NoteTagModel.deleteNoteAllTags(noteId);
     await Promise.all(
-      tagObjects.map((tag) => NoteTagModel.addTagToNote(noteId, tag.id))
+      tagIds.map((tagId) => NoteTagModel.addTagToNote(noteId, tagId))
     );
   } else if (tags) {
     // 如果tags是空数组，只需要删除原有标签关联
@@ -51,6 +59,14 @@ const getNoteTagsByNoteId = async (noteId) => {
   return await NoteTagModel.getTagsByNoteId(noteId);
 };
 
+// 根据标签数组获取笔记ID
+const getNoteIdsByTags = async (tags) => {
+  // 获取标签ID
+  const tagIds = await getTagIdsByNames(tags);
+  // 使用NoteTagModel的getNoteIdsByTagIds方法获取笔记ID
+  return await NoteTagModel.getNoteIdsByTagIds(tagIds);
+};
+
 module.exports = {
   getAllTags,
   getTagById,
@@ -58,5 +74,7 @@ module.exports = {
   updateTag,
   deleteTag,
   handleNoteTags,
+  getTagIdsByNames,
   getNoteTagsByNoteId,
+  getNoteIdsByTags,
 };

@@ -46,7 +46,30 @@ class NoteModel {
   }
 
   async find(query: QueryParams = {}) {
-    const docs = await Note.find(query).exec();
+    const { orderBy, page, limit, ...otherQuery } = query;
+    // 处理查询条件中的id转换为_id
+    const processedQuery = { ...otherQuery };
+    if ("id" in processedQuery) {
+      processedQuery._id = processedQuery.id;
+      delete processedQuery.id;
+    }
+    let mongoQuery = Note.find(processedQuery);
+
+    // 处理排序
+    if (orderBy) {
+      const [field, direction] = orderBy.split(":");
+      mongoQuery = mongoQuery.sort({
+        [field]: direction?.toLowerCase() === "desc" ? -1 : 1,
+      });
+    }
+
+    // 处理分页
+    if (page && limit) {
+      const skip = (page - 1) * limit;
+      mongoQuery = mongoQuery.skip(skip).limit(limit);
+    }
+
+    const docs = await mongoQuery.exec();
     return docs.map((doc) => this.processRow(transformId(doc)));
   }
 

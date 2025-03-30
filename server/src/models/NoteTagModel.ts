@@ -64,6 +64,15 @@ class NoteTag extends BaseModel<INoteTag> {
     return notes.filter((note) => note !== null);
   }
 
+  // 根据标签ID数组获取笔记ID列表
+  async getNoteIdsByTagIds(tagIds: number[]) {
+    const result = await pool.query(
+      `SELECT DISTINCT note_id FROM ${this.tableName} WHERE tag_id = ANY($1)`,
+      [tagIds]
+    );
+    return result.rows.map((row) => row.note_id);
+  }
+
   // 删除笔记的所有标签关联
   async deleteNoteAllTags(noteId: string) {
     const result = await pool.query(

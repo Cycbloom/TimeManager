@@ -19,11 +19,36 @@ class NoteService {
   }
 
   async getNotes(query = {}) {
+    const { orderBy, page = 1, limit = 10, tags, ...otherQuery } = query;
+
     // 过滤掉值为空字符串的查询条件
     const filteredQuery = Object.fromEntries(
-      Object.entries(query).filter(([_, value]) => value !== "")
+      Object.entries(otherQuery).filter(([_, value]) => value !== "")
     );
-    const notes = await NoteModel.find(filteredQuery);
+
+    // 如果有标签过滤，先获取符合条件的笔记ID
+    if (tags && tags.length > 0) {
+      const noteIds = await tagService.getNoteIdsByTags(tags);
+      if (noteIds.length === 0) return [];
+      filteredQuery.id = { $in: noteIds };
+    }
+
+    // 构建查询参数
+    const queryParams = {
+      ...filteredQuery,
+      page,
+      limit,
+    };
+
+    // 添加排序参数
+    if (orderBy) {
+      const [field, order] = orderBy.split(" ");
+      queryParams.orderBy = `${field}:${order}`;
+    }
+
+    // 执行查询
+    const notes = await NoteModel.find(queryParams);
+
     // 为每个笔记添加标签信息
     const notesWithTags = await Promise.all(
       notes.map(async (note) => {
@@ -31,6 +56,7 @@ class NoteService {
         return { ...note, tags };
       })
     );
+
     return notesWithTags;
   }
 

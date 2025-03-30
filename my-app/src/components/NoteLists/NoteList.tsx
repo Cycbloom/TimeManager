@@ -30,7 +30,7 @@ const NoteList = () => {
   ) => {
     const noteQuery: NoteQuery = {
       type: filters.type as NoteType,
-      tags: filters.tags.map((tag: Tag) => tag.id),
+      tags: filters.tags.map((tag: Tag) => tag.name),
       notebook_id: filters.notebookId,
     };
 
