@@ -7,6 +7,7 @@ import {
   UpdateData,
 } from "../types/model";
 import noteSchema from "../schema/noteSchema";
+import logger from "../utils/logger";
 
 const Note = mongoose.model<RemoveBrand<INote>>("notes", noteSchema);
 
@@ -20,6 +21,14 @@ const transformId = (doc: any) => {
 };
 
 class NoteModel {
+  protected processRow(row: any) {
+    const processedRow = { ...row };
+    if ("__v" in processedRow) {
+      delete processedRow.__v;
+    }
+    return processedRow;
+  }
+
   async create(note: CreateData<INote>) {
     const now = new Date();
     const newNote = new Note({
@@ -28,17 +37,17 @@ class NoteModel {
       updated_at: now,
     });
     const result = await newNote.save();
-    return transformId(result);
+    return this.processRow(transformId(result));
   }
 
   async findById(id: string) {
     const doc = await Note.findById(id).exec();
-    return transformId(doc);
+    return this.processRow(transformId(doc));
   }
 
   async find(query: QueryParams = {}) {
     const docs = await Note.find(query).exec();
-    return docs.map(transformId);
+    return docs.map((doc) => this.processRow(transformId(doc)));
   }
 
   async update(id: string, note: UpdateData<INote>) {
@@ -53,7 +62,7 @@ class NoteModel {
       },
       { new: true }
     );
-    return transformId(doc);
+    return this.processRow(transformId(doc));
   }
 
   async delete(id: string) {

@@ -9,6 +9,17 @@ class BaseModel<T> {
     this.tableName = tableName;
   }
 
+  protected processRow(row: any) {
+    const processedRow = { ...row };
+    if ("created_at" in processedRow) {
+      delete processedRow.created_at;
+    }
+    if ("updated_at" in processedRow) {
+      delete processedRow.updated_at;
+    }
+    return processedRow;
+  }
+
   async find(query: QueryParams = {}) {
     let sqlQuery = `SELECT * FROM ${this.tableName}`;
     const values = [];
@@ -51,7 +62,7 @@ class BaseModel<T> {
     }
 
     const result = await pool.query(sqlQuery, values);
-    return result.rows;
+    return result.rows.map((row) => this.processRow(row));
   }
 
   async create(data: CreateData<T>) {
@@ -64,7 +75,7 @@ class BaseModel<T> {
              VALUES (${placeholders}) RETURNING *`,
       values
     );
-    return result.rows[0];
+    return this.processRow(result.rows[0]);
   }
 
   async update(id: number, data: UpdateData<T>) {
@@ -81,7 +92,7 @@ class BaseModel<T> {
              WHERE id = $${columns.length + 1} RETURNING *`,
       [...values, id]
     );
-    return result.rows[0];
+    return this.processRow(result.rows[0]);
   }
 
   async delete(id: number) {
@@ -89,7 +100,7 @@ class BaseModel<T> {
       `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`,
       [id]
     );
-    return result.rows[0];
+    return this.processRow(result.rows[0]);
   }
 }
 

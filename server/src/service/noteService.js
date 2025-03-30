@@ -1,7 +1,6 @@
 const NoteModel = require("../models/NoteModel");
 const NoteTagModel = require("../models/NoteTagModel");
 const TagModel = require("../models/TagModel");
-const logger = require("../utils/logger");
 
 class NoteService {
   async createNote(noteData) {
@@ -10,7 +9,6 @@ class NoteService {
     let tagObjects = [];
     if (tags && tags.length > 0) {
       // 将标签名转换为标签对象（包含id）
-      logger.info(tags);
       tagObjects = await Promise.all(
         tags.map((tagName) => TagModel.findOrCreateByName(tagName))
       );
@@ -20,7 +18,7 @@ class NoteService {
       );
     }
 
-    return { ...note, tags: tagObjects };
+    return { ...note, tags: tags };
   }
 
   async getNoteById(id) {
@@ -33,7 +31,11 @@ class NoteService {
   }
 
   async getNotes(query = {}) {
-    const notes = await NoteModel.find(query);
+    // 过滤掉值为空字符串的查询条件
+    const filteredQuery = Object.fromEntries(
+      Object.entries(query).filter(([_, value]) => value !== "")
+    );
+    const notes = await NoteModel.find(filteredQuery);
     // 为每个笔记添加标签信息
     const notesWithTags = await Promise.all(
       notes.map(async (note) => {

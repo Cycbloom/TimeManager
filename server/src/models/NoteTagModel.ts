@@ -2,7 +2,7 @@ import BaseModel from "./BaseModel";
 import { INoteTag } from "../types/note_tag";
 import pool from "../config/postgres";
 import NoteModel from "./NoteModel";
-import logger from "../utils/logger";
+const logger = require("../utils/logger");
 
 class NoteTag extends BaseModel<INoteTag> {
   constructor() {
@@ -11,7 +11,6 @@ class NoteTag extends BaseModel<INoteTag> {
 
   // 为笔记添加标签
   async addTagToNote(noteId: string, tagId: number) {
-    logger.info(`noteId: ${noteId}, length: ${noteId.length}, max length: 24`);
     return await this.create({
       note_id: noteId,
       tag_id: tagId,
@@ -30,12 +29,14 @@ class NoteTag extends BaseModel<INoteTag> {
   // 获取笔记的所有标签
   async getTagsByNoteId(noteId: string) {
     const result = await pool.query(
-      `SELECT t.* FROM tags t 
+      `SELECT t.name FROM tags t 
        JOIN note_tags nt ON t.id = nt.tag_id 
        WHERE nt.note_id = $1`,
       [noteId]
     );
-    return result.rows;
+    const tags = result.rows.map((row) => row.name);
+    logger.info(JSON.stringify(tags));
+    return tags;
   }
 
   // 获取使用了特定标签的所有笔记
