@@ -6,9 +6,9 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Notebook } from "../../../types/notes";
+import { Notebook } from "@/types/notes";
 import { useContext, useState } from "react";
-import { useData } from "../../../data/DataContext";
+import { useData } from "@/data/DataContext";
 import { NotebookContext } from "../NotebookContext";
 import { logger } from "@/utils/logger";
 

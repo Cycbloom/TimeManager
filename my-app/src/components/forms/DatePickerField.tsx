@@ -8,7 +8,7 @@ interface DatePickerFieldProps {
   label: string;
 }
 
-export const DatePickerField = ({ name, label }: DatePickerFieldProps) => {
+const DatePickerField = ({ name, label }: DatePickerFieldProps) => {
   const {
     watch,
     formState: { errors },
@@ -54,3 +54,5 @@ export const DatePickerField = ({ name, label }: DatePickerFieldProps) => {
     />
   );
 };
+
+export default DatePickerField;

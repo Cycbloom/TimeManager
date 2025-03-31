@@ -8,7 +8,7 @@ interface Props {
   label: string;
 }
 
-export const TagInput = ({ name, label }: Props) => {
+const TagInput = ({ name, label }: Props) => {
   const [inputValue, setInputValue] = useState("");
   const {
     setValue,
@@ -60,3 +60,5 @@ export const TagInput = ({ name, label }: Props) => {
     </Box>
   );
 };
+
+export default TagInput;

@@ -1,7 +1,7 @@
 //src/components/NoteLists/NoteList.tsx
 import { List, Typography, Divider } from "@mui/material";
 import { useState } from "react";
-import { Note, NoteQuery, NoteType, Tag } from "../../types/notes";
+import { Note, NoteQuery, NoteType, Tag } from "@/types/notes";
 import NoteItem from "./NoteItem";
 import EditNoteDialog from "./EditNoteDialog";
 import NoteSelector, { NoteFilterFormData } from "./NoteSelector";

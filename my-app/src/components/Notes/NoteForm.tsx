@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NoteFormData, Note } from "../../types";
+import { NoteFormData, Note } from "@/types/notes";
 import BaseNoteForm from "./BaseNoteForm";
 import { NotebookContext } from "./NotebookContext";
 

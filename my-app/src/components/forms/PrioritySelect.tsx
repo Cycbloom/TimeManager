@@ -1,5 +1,5 @@
 // src/components/forms/PrioritySelect.tsx
-import { GenericSelect } from "./GenericSelect";
+import GenericSelect from "./GenericSelect";
 import { JSX } from "react";
 import { priorityOptions } from "@/types/tasks";
 import { Chip, Box } from "@mui/material";
@@ -28,7 +28,7 @@ const priorityConfig = {
   { color: string; icon: JSX.Element; label: string }
 >;
 
-export const PrioritySelect = () => (
+const PrioritySelect = () => (
   <GenericSelect
     name="priority"
     label="任务优先级"
@@ -53,3 +53,5 @@ export const PrioritySelect = () => (
     })}
   />
 );
+
+export default PrioritySelect;

@@ -1,5 +1,5 @@
 // src/components/NoteLists/NotePage.tsx
-import { DataProvider } from "../../data/DataContext";
+import { DataProvider } from "@/data/DataContext";
 import NotePageContent from "./NotesPageContent";
 import { NotebookProvider } from "./NotebookContext";
 const NotePage = () => {

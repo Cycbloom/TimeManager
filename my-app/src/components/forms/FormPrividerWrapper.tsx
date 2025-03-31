@@ -16,7 +16,7 @@ interface FormProviderWrapperProps<T extends FieldValues> {
   schema: ZodSchema<T>;
 }
 
-export const FormProviderWrapper = <T extends FieldValues>({
+const FormProviderWrapper = <T extends FieldValues>({
   children,
   defaultValues,
   schema,
@@ -28,3 +28,5 @@ export const FormProviderWrapper = <T extends FieldValues>({
 
   return <FormProvider {...methods}>{children(methods)}</FormProvider>;
 };
+
+export default FormProviderWrapper;

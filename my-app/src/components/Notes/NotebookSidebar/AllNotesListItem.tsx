@@ -1,7 +1,7 @@
 // src/components/NoteLists/NotebookSidebar/AllNotesListItem.tsx
 import { ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { useState } from "react";
-import { useData } from "../../../data/DataContext";
+import { useData } from "@/data/DataContext";
 
 interface AllNotesListItemProps {
   selected: boolean;

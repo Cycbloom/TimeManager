@@ -1,4 +1,4 @@
-import NotePage from "@/components/NoteLists/NotePage";
+import NotePage from "@/components/Notes/NotePage";
 
 const Home = () => {
   return (

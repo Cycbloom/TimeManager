@@ -8,12 +8,7 @@ type FormInputProps = TextFieldProps & {
   validation?: any;
 };
 
-export const FormInput = ({
-  name,
-  label,
-  validation,
-  ...props
-}: FormInputProps) => {
+const FormInput = ({ name, label, validation, ...props }: FormInputProps) => {
   const {
     register,
     formState: { errors },
@@ -34,3 +29,5 @@ export const FormInput = ({
     />
   );
 };
+
+export default FormInput;

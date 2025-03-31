@@ -4,7 +4,7 @@ import { Box, Alert, CircularProgress } from "@mui/material";
 import { NotebookContext } from "../NotebookContext";
 import NewNotebookInput from "./NewNotebookInput";
 import NotebookList from "./NotebookList";
-import { useData } from "../../../data/DataContext";
+import { useData } from "@/data/DataContext";
 
 const NotebookSidebar = () => {
   const { selectedNotebook, setSelectedNotebook } = useContext(NotebookContext);

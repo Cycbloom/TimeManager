@@ -10,7 +10,7 @@ interface TagAutocompleteProps {
   placeholder?: string;
 }
 
-export const TagAutocomplete = ({
+const TagAutocomplete = ({
   selectedTags,
   setSelectedTags,
   placeholder = "选择或输入标签",
@@ -49,3 +49,5 @@ export const TagAutocomplete = ({
     </Box>
   );
 };
+
+export default TagAutocomplete;

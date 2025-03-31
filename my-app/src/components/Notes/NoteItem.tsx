@@ -2,8 +2,7 @@
 import { ListItem, ListItemText, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Note } from "../../types/notes";
-import { logger } from "@/utils/logger";
+import { Note } from "@/types/notes";
 
 interface Props {
   note: Note;

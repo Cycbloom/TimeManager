@@ -1,5 +1,5 @@
 import BaseNoteForm from "./BaseNoteForm";
-import { NoteFormData, Note } from "../../types";
+import { NoteFormData, Note } from "@/types/notes";
 
 interface Props {
   note: Note;

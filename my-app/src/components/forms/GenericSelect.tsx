@@ -14,7 +14,7 @@ interface GenericSelectProps {
   options: SelectOption[];
 }
 
-export const GenericSelect = ({ name, label, options }: GenericSelectProps) => {
+const GenericSelect = ({ name, label, options }: GenericSelectProps) => {
   const {
     register,
     formState: { errors },
@@ -39,3 +39,5 @@ export const GenericSelect = ({ name, label, options }: GenericSelectProps) => {
     </FormControl>
   );
 };
+
+export default GenericSelect;

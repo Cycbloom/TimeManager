@@ -1,8 +1,6 @@
 // src/components/NoteLists/NoteFilterContext.tsx
 import { createContext, useState } from "react";
 
-import { NoteType, Tag } from "../../types/notes";
-
 interface NotebookContextType {
   selectedNotebook: number | null;
   setSelectedNotebook: (notebookId: number | null) => void;

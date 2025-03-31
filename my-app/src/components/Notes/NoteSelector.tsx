@@ -1,7 +1,9 @@
-import { Paper, Typography } from "@mui/material";
-import { FormProviderWrapper } from "../forms/FromPrividerWrapper";
-import { TypeSelect } from "../forms/TypeSelect";
-import { TagAutocomplete } from "../forms/TagAutocomplete";
+import { Paper } from "@mui/material";
+import {
+  FormProviderWrapper,
+  TypeSelect,
+  TagAutocomplete,
+} from "@/components/forms";
 import { NoteType, Tag } from "@/types/notes";
 import { useData } from "@/data/DataContext";
 import { z } from "zod";

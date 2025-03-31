@@ -9,7 +9,7 @@ interface EstimateSliderProps {
   step?: number;
 }
 
-export const EstimateSlider = ({
+const EstimateSlider = ({
   name,
   label,
   max = 24,
@@ -49,3 +49,5 @@ export const EstimateSlider = ({
     </Box>
   );
 };
+
+export default EstimateSlider;

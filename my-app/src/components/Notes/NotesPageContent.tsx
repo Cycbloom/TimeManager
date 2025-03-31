@@ -1,10 +1,9 @@
 // src/components/NoteLists/NotesPageContent.tsx
 import { Container, Grid2 as Grid, Typography } from "@mui/material";
-
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
 import NotebookSidebar from "./NotebookSidebar";
-import { useData } from "../../data/DataContext";
+import { useData } from "@/data/DataContext";
 
 const NotesPageContent = () => {
   const { notes } = useData();

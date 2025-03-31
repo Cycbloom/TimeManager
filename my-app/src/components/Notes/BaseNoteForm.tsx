@@ -2,10 +2,12 @@
 import { Button, Typography } from "@mui/material";
 import { SubmitHandler } from "react-hook-form";
 import { NoteFormData, noteFormSchema } from "../../types/notes";
-import { FormProviderWrapper } from "../forms/FromPrividerWrapper";
-import { FormInput } from "../forms/FromInput";
-import { TypeSelect } from "../forms/TypeSelect";
-import { TagInput } from "../forms/TagInput";
+import {
+  FormProviderWrapper,
+  FormInput,
+  TypeSelect,
+  TagInput,
+} from "@/components/forms";
 import { useData } from "@/data/DataContext";
 
 interface Props {
