@@ -29,6 +29,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      mongo:
+        condition: service_healthy
 
   postgres:
     image: postgres:16.8-alpine3.20
@@ -48,6 +50,10 @@ services:
       - 27017:27017
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
 
 volumes:
   node_modules_1:
