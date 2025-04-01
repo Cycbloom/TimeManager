@@ -3,7 +3,7 @@ import { List, Typography, Divider } from "@mui/material";
 import { useState } from "react";
 import { Note, NoteQuery, NoteType, Tag } from "@/types/notes";
 import NoteItem from "./NoteItem";
-import EditNoteDialog from "./EditNoteDialog";
+import { EditNoteDialog } from "@/components/Notes/NoteForms";
 import NoteSelector, { NoteFilterFormData } from "./NoteSelector";
 import { useData } from "@/data/DataContext";
 

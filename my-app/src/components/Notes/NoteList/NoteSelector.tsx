@@ -8,7 +8,7 @@ import { NoteType, Tag } from "@/types/notes";
 import { useData } from "@/data/DataContext";
 import { z } from "zod";
 import { useEffect, useContext } from "react";
-import { NotebookContext } from "./NotebookContext";
+import { NotebookContext } from "../NotebookContext";
 
 export interface NoteFilterFormData {
   type: NoteType | "";

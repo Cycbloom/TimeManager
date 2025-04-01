@@ -1,7 +1,7 @@
 // src/components/NoteLists/BaseNoteForm.tsx
 import { Button, Typography } from "@mui/material";
 import { SubmitHandler } from "react-hook-form";
-import { NoteFormData, noteFormSchema } from "../../types/notes";
+import { NoteFormData, noteFormSchema } from "@/types/notes";
 import {
   FormProviderWrapper,
   FormInput,
