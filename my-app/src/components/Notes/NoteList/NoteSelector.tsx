@@ -1,14 +1,11 @@
 import { Paper } from "@mui/material";
-import {
-  FormProviderWrapper,
-  TypeSelect,
-  TagAutocomplete,
-} from "@/components/forms";
+import { TypeSelect, TagAutocomplete } from "@/components/form-controls";
 import { NoteType, Tag } from "@/types/notes";
 import { useData } from "@/data/DataContext";
 import { z } from "zod";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { NotebookContext } from "../NotebookContext";
+import BaseForm from "@/components/forms/BaseForm";
 
 export interface NoteFilterFormData {
   type: NoteType | "";
@@ -26,20 +23,29 @@ const filterFormSchema = z.object({
   ),
 });
 
-interface NoteFilterProps {
+interface Props {
   onFilterChange?: (
     filters: NoteFilterFormData & { notebookId: number | null }
   ) => void;
 }
 
-const NoteSelector = ({ onFilterChange }: NoteFilterProps) => {
+const NoteSelector = ({ onFilterChange }: Props) => {
   const { tags } = useData();
   const { selectedNotebook } = useContext(NotebookContext);
+  const [formData, setFormData] = useState<NoteFilterFormData>({
+    type: "",
+    tags: [],
+  });
 
   // 初始加载标签数据
   useEffect(() => {
     tags.fetch();
   }, []);
+
+  // 监听表单数据和 selectedNotebook 的变化
+  useEffect(() => {
+    onFilterChange?.({ ...formData, notebookId: selectedNotebook });
+  }, [formData, selectedNotebook]);
 
   return (
     <Paper
@@ -50,38 +56,19 @@ const NoteSelector = ({ onFilterChange }: NoteFilterProps) => {
         backgroundColor: "#f9f9f9",
       }}
     >
-      <FormProviderWrapper<NoteFilterFormData>
+      <BaseForm<NoteFilterFormData>
         defaultValues={{ type: "", tags: [] }}
         schema={filterFormSchema}
+        onSubmit={(data) =>
+          onFilterChange?.({ ...data, notebookId: selectedNotebook })
+        }
+        onFormDataChange={setFormData}
+        formTitle="笔记筛选"
+        resetAfterSubmit={false}
       >
-        {({ watch, setValue }) => {
-          // 分别监听表单值变化
-          const type = watch("type");
-          const tags = watch("tags");
-
-          useEffect(() => {
-            if (onFilterChange) {
-              onFilterChange({
-                type,
-                tags,
-                notebookId: selectedNotebook,
-              });
-            }
-          }, [type, tags, selectedNotebook]);
-
-          return (
-            <>
-              <TypeSelect />
-              <TagAutocomplete
-                selectedTags={tags}
-                setSelectedTags={(newTags) => {
-                  setValue("tags", newTags);
-                }}
-              />
-            </>
-          );
-        }}
-      </FormProviderWrapper>
+        <TypeSelect name="type" label="笔记类型" />
+        <TagAutocomplete name="tags" placeholder="选择或输入标签" />
+      </BaseForm>
     </Paper>
   );
 };
