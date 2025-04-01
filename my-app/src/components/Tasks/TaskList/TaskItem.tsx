@@ -1,10 +1,10 @@
-import { Chip, Box, Tooltip, IconButton } from "@mui/material";
+import { Tooltip, IconButton } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PauseIcon from "@mui/icons-material/Pause";
 import { Task } from "@/types/tasks";
-import { format } from "date-fns";
 import BaseItem from "@/components/Lists/BaseItem";
+import TaskContent from "./TaskContent";
 
 interface TaskItemProps {
   task: Task;
@@ -12,19 +12,6 @@ interface TaskItemProps {
   onDelete: (taskId: string) => void;
   onStatusChange: (taskId: string, newStatus: Task["status"]) => void;
 }
-
-const getPriorityColor = (priority: string) => {
-  switch (priority) {
-    case "high":
-      return "error";
-    case "medium":
-      return "warning";
-    case "low":
-      return "success";
-    default:
-      return "default";
-  }
-};
 
 const TaskItem = ({
   task,
@@ -72,41 +59,13 @@ const TaskItem = ({
     }
   };
 
-  const primaryContent = (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      {task.title}
-      <Chip
-        size="small"
-        label={task.priority}
-        color={getPriorityColor(task.priority)}
-      />
-      <Chip size="small" label={task.status} variant="outlined" />
-    </Box>
-  );
-
-  const secondaryContent = (
-    <Box>
-      <div>{task.description}</div>
-      <div>截止日期: {format(new Date(task.dueDate), "yyyy-MM-dd")}</div>
-      <div>预计时间: {task.estimatedHours}小时</div>
-      {task.tags.length > 0 && (
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1 }}>
-          {task.tags.map((tag) => (
-            <Chip key={tag} label={tag} size="small" variant="outlined" />
-          ))}
-        </Box>
-      )}
-    </Box>
-  );
-
   return (
     <BaseItem
       item={task}
       itemId={task.id}
       onEdit={onEdit}
       onDelete={onDelete}
-      primaryContent={primaryContent}
-      secondaryContent={secondaryContent}
+      primaryContent={<TaskContent task={task} />}
       extraActions={renderStatusActions()}
       dataType="task"
     />

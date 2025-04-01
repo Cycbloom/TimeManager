@@ -1,6 +1,7 @@
 // src/components/NoteLists/NoteItem.tsx
 import BaseItem from "@/components/Lists/BaseItem";
 import { Note } from "@/types/notes";
+import NoteContent from "./NoteContent";
 
 interface Props {
   note: Note;
@@ -15,8 +16,7 @@ const NoteItem = ({ note, onEdit, onDelete }: Props) => {
       itemId={note.id}
       onEdit={onEdit}
       onDelete={onDelete}
-      primaryContent={note.title}
-      secondaryContent={note.content}
+      primaryContent={<NoteContent note={note} />}
       dataType="note"
     />
   );
