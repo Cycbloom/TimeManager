@@ -4,8 +4,13 @@ import { noteTypeOptionsVer2 } from "@/types";
 
 const optionsWithEmpty = [{ value: "", label: "全部" }, ...noteTypeOptionsVer2];
 
-const TypeSelect = () => (
-  <GenericSelect name="type" label="类型" options={optionsWithEmpty} />
+interface TypeSelectProps {
+  name: string;
+  label: string;
+}
+
+const TypeSelect = ({ name, label }: TypeSelectProps) => (
+  <GenericSelect name={name} label={label} options={optionsWithEmpty} />
 );
 
 export default TypeSelect;

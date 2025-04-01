@@ -15,32 +15,23 @@ function GenericList<T>({
   renderItem,
   keyExtractor,
   emptyMessage = "没有可用项目",
-  header,
   showDividers = true,
 }: GenericListProps<T>) {
   if (items.length === 0) {
-    return (
-      <>
-        {header}
-        <Typography>{emptyMessage}</Typography>
-      </>
-    );
+    return <Typography>{emptyMessage}</Typography>;
   }
 
   return (
-    <>
-      {header}
-      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-        {items.map((item, index) => (
-          <React.Fragment key={keyExtractor(item)}>
-            {renderItem(item, index)}
-            {showDividers && index < items.length - 1 && (
-              <Divider component="li" />
-            )}
-          </React.Fragment>
-        ))}
-      </List>
-    </>
+    <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+      {items.map((item, index) => (
+        <React.Fragment key={keyExtractor(item)}>
+          {renderItem(item, index)}
+          {showDividers && index < items.length - 1 && (
+            <Divider component="li" />
+          )}
+        </React.Fragment>
+      ))}
+    </List>
   );
 }
 

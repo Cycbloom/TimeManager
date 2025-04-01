@@ -11,14 +11,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PauseIcon from "@mui/icons-material/Pause";
-import { Task } from "../../types/tasks";
+import { Task } from "@/types/tasks";
 import { format } from "date-fns";
 
 interface TaskItemProps {
   task: Task;
   onEdit: (task: Task) => void;
-  onDelete: (taskId: number) => void;
-  onStatusChange: (taskId: number, newStatus: Task["status"]) => void;
+  onDelete: (taskId: string) => void;
+  onStatusChange: (taskId: string, newStatus: Task["status"]) => void;
 }
 
 const getPriorityColor = (priority: string) => {
@@ -41,7 +41,7 @@ const TaskItem = ({
   onStatusChange,
 }: TaskItemProps) => {
   const handleDragStart = (event: React.DragEvent) => {
-    event.dataTransfer.setData("task/id", task.id.toString());
+    event.dataTransfer.setData("task/id", task.id);
     event.currentTarget.classList.add("dragging");
   };
 

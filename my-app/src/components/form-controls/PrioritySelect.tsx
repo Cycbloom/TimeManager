@@ -28,10 +28,15 @@ const priorityConfig = {
   { color: string; icon: JSX.Element; label: string }
 >;
 
-const PrioritySelect = () => (
+interface PrioritySelectProps {
+  name: string;
+  label: string;
+}
+
+const PrioritySelect = ({ name, label }: PrioritySelectProps) => (
   <GenericSelect
-    name="priority"
-    label="任务优先级"
+    name={name}
+    label={label}
     options={priorityOptions.map((opt) => {
       const priorityKey = opt.value as PriorityKey;
       return {

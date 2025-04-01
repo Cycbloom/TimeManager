@@ -1,11 +1,11 @@
 //src/components/NoteLists/NoteList.tsx
-import { List, Typography, Divider } from "@mui/material";
 import { useState } from "react";
 import { Note, NoteQuery, NoteType, Tag } from "@/types/notes";
 import NoteItem from "./NoteItem";
 import { EditNoteDialog } from "@/components/Notes/NoteForms";
 import NoteSelector, { NoteFilterFormData } from "./NoteSelector";
 import { useData } from "@/data/DataContext";
+import GenericList from "@/components/Lists/GenericList";
 
 const NoteList = () => {
   const { notes } = useData();
@@ -40,22 +40,18 @@ const NoteList = () => {
   return (
     <>
       <NoteSelector onFilterChange={handleFilterChange} />
-      {notes.data.length > 0 ? (
-        <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-          {notes.data.map((note, index) => (
-            <div key={note.id}>
-              <NoteItem
-                note={note}
-                onEdit={handleEditClick}
-                onDelete={notes.delete}
-              />
-              {index < notes.data.length - 1 && <Divider component="li" />}
-            </div>
-          ))}
-        </List>
-      ) : (
-        <Typography>No notes available.</Typography>
-      )}
+      <GenericList
+        items={notes.data}
+        renderItem={(note: Note) => (
+          <NoteItem
+            note={note}
+            onEdit={handleEditClick}
+            onDelete={notes.delete}
+          />
+        )}
+        keyExtractor={(note: Note) => note.id}
+        emptyMessage="没有可用的笔记"
+      />
       {editingNote && (
         <EditNoteDialog
           open={!!editingNote}

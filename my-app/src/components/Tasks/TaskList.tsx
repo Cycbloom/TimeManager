@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Task } from "../../types/tasks";
-import GenericList from "../common/GenericList";
+import GenericList from "../Lists/GenericList";
 import TaskItem from "./TaskItem";
 import EditTaskDialog from "./TaskForm/EditTaskDialog";
 import TaskFilterBar from "./TaskFilterBar";
@@ -8,8 +8,8 @@ import TaskFilterBar from "./TaskFilterBar";
 interface TaskListProps {
   tasks: Task[];
   onUpdate: (task: Task) => void;
-  onDelete: (taskId: number) => void;
-  onStatusChange: (taskId: number, newStatus: Task["status"]) => void;
+  onDelete: (taskId: string) => void;
+  onStatusChange: (taskId: string, newStatus: Task["status"]) => void;
 }
 
 const TaskList = ({
@@ -33,12 +33,26 @@ const TaskList = ({
     setEditingTask(null);
   };
 
+  const handleFilterChange = (filters: {
+    status?: string;
+    priority?: string;
+  }) => {
+    // 根据filters过滤tasks
+    const filteredTasks = tasks.filter((task) => {
+      if (filters.status && task.status !== filters.status) return false;
+      if (filters.priority && task.priority !== filters.priority) return false;
+
+      return true;
+    });
+    //setTasks(filteredTasks);
+  };
+
   return (
     <>
-      <GenericList
+      <TaskFilterBar onFilterChange={handleFilterChange} />
+      <GenericList<Task>
         items={tasks}
         keyExtractor={(task) => task.id}
-        header={<TaskFilterBar />}
         emptyMessage="没有可用任务"
         renderItem={(task) => (
           <TaskItem

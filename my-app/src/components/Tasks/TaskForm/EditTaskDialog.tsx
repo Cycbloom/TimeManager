@@ -1,5 +1,5 @@
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
-import { Task, TaskFormData } from "../../../types/tasks";
+import { Task, TaskFormData } from "@/types/tasks";
 import BaseTaskForm from "./BaseTaskForm";
 
 interface EditTaskDialogProps {

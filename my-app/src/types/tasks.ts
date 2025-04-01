@@ -1,6 +1,6 @@
 //  src/types/tasks.ts
 import { z } from "zod";
-import { SelectOption } from "../components/forms/GenericSelect";
+import { SelectOption } from "@/components/forms/GenericSelect";
 import { QueryParams } from "./model";
 
 export const taskFormSchema = z.object({
@@ -20,7 +20,7 @@ export const taskFormSchema = z.object({
 export type TaskFormData = z.infer<typeof taskFormSchema>;
 
 export interface Task extends TaskFormData {
-  id: number;
+  id: string;
   bufferTime: number;
   status: "created" | "ready" | "executing" | "completed";
   storagePath?: string;

@@ -1,14 +1,8 @@
 // src/components/NoteLists/BaseNoteForm.tsx
-import { Button, Typography } from "@mui/material";
 import { SubmitHandler } from "react-hook-form";
 import { NoteFormData, noteFormSchema } from "@/types/notes";
-import {
-  FormProviderWrapper,
-  FormInput,
-  TypeSelect,
-  TagInput,
-} from "@/components/forms";
-import { useData } from "@/data/DataContext";
+import { FormInput, TypeSelect, TagInput } from "@/components/form-controls";
+import BaseForm from "@/components/forms/BaseForm";
 
 interface Props {
   onSubmit: SubmitHandler<NoteFormData>;
@@ -23,43 +17,19 @@ const BaseNoteForm = ({
   submitButtonText,
   formTitle,
 }: Props) => {
-  const { tags } = useData();
-
   return (
-    <FormProviderWrapper<NoteFormData>
+    <BaseForm<NoteFormData>
+      onSubmit={onSubmit}
       defaultValues={defaultValues}
+      submitButtonText={submitButtonText}
+      formTitle={formTitle}
       schema={noteFormSchema}
     >
-      {({ handleSubmit, reset }) => (
-        <form
-          onSubmit={handleSubmit((data) => {
-            onSubmit(data);
-            const tagsChanged =
-              JSON.stringify(data.tags) !== JSON.stringify(defaultValues.tags);
-            if (tagsChanged) tags.fetch();
-            reset(defaultValues);
-          })}
-        >
-          {formTitle && (
-            <Typography variant="h4" gutterBottom>
-              {formTitle}
-            </Typography>
-          )}
-          <FormInput name="title" label="Title" />
-          <FormInput name="content" label="Content" multiline />
-          <TypeSelect />
-          <TagInput name="tags" label="Tags" />
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            style={{ marginTop: "10px" }}
-          >
-            {submitButtonText}
-          </Button>
-        </form>
-      )}
-    </FormProviderWrapper>
+      <FormInput name="title" label="Title" />
+      <FormInput name="content" label="Content" multiline />
+      <TypeSelect name="type" label="Type" />
+      <TagInput name="tags" label="Tags" />
+    </BaseForm>
   );
 };
 
