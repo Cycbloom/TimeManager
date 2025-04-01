@@ -5,7 +5,7 @@ import NoteItem from "./NoteItem";
 import { EditNoteDialog } from "@/components/Notes/NoteForms";
 import NoteSelector, { NoteFilterFormData } from "./NoteSelector";
 import { useData } from "@/data/DataContext";
-import GenericList from "@/components/Lists/GenericList";
+import BaseList from "@/components/Lists/BaseList";
 
 const NoteList = () => {
   const { notes } = useData();
@@ -39,8 +39,7 @@ const NoteList = () => {
 
   return (
     <>
-      <NoteSelector onFilterChange={handleFilterChange} />
-      <GenericList
+      <BaseList<Note>
         items={notes.data}
         renderItem={(note: Note) => (
           <NoteItem
@@ -51,6 +50,7 @@ const NoteList = () => {
         )}
         keyExtractor={(note: Note) => note.id}
         emptyMessage="没有可用的笔记"
+        filterComponent={<NoteSelector onFilterChange={handleFilterChange} />}
       />
       {editingNote && (
         <EditNoteDialog

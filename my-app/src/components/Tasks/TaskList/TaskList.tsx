@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Task } from "../../types/tasks";
-import GenericList from "../Lists/GenericList";
-import TaskItem from "./TaskList/TaskItem";
-import EditTaskDialog from "./TaskForm/EditTaskDialog";
+import { Task } from "@/types/tasks";
+import BaseList from "@/components/Lists/BaseList";
+import TaskItem from "./TaskItem";
+import EditTaskDialog from "../TaskForm/EditTaskDialog";
 import TaskFilterBar from "./TaskFilterBar";
 
 interface TaskListProps {
@@ -49,11 +49,11 @@ const TaskList = ({
 
   return (
     <>
-      <TaskFilterBar onFilterChange={handleFilterChange} />
-      <GenericList<Task>
+      <BaseList<Task>
         items={tasks}
         keyExtractor={(task) => task.id}
         emptyMessage="没有可用任务"
+        filterComponent={<TaskFilterBar onFilterChange={handleFilterChange} />}
         renderItem={(task) => (
           <TaskItem
             task={task}

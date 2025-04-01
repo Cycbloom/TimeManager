@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useState } from "react";
-import { priorityOptions } from "../../types/tasks";
+import { priorityOptions } from "@/types/tasks";
 
 interface TaskFilterBarProps {
   onFilterChange?: (filters: { status?: string; priority?: string }) => void;

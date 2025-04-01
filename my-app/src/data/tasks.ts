@@ -9,7 +9,7 @@ export function createTasksSlice() {
   });
 
   // 添加任务状态流转方法
-  const updateStatus = async (taskId: number, newStatus: TaskStatus) => {
+  const updateStatus = async (taskId: string, newStatus: TaskStatus) => {
     try {
       await apiClient.patch(`/api/tasks/${taskId}/status`, {
         status: newStatus,

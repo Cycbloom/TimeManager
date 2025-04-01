@@ -1,7 +1,7 @@
-import { useData } from "../../data/DataContext";
-import { Task, TaskFormData } from "../../types/tasks";
-import BaseTaskForm from "./TaskForm/BaseTaskForm";
-import TaskList from "./TaskList";
+import { useData } from "@/data/DataContext";
+import { Task, TaskFormData } from "@/types/tasks";
+import { BaseTaskForm } from "./TaskForm";
+import { TaskList } from "./TaskList";
 import { Box } from "@mui/material";
 
 const TaskPageContent = () => {
@@ -10,7 +10,7 @@ const TaskPageContent = () => {
   const handleCreate = async (data: TaskFormData) => {
     const newTask: Task = {
       ...data,
-      id: 0,
+      id: "",
       status: "created",
       bufferTime: 0,
     };
@@ -18,15 +18,15 @@ const TaskPageContent = () => {
   };
 
   const handleUpdate = async (task: Task) => {
-    tasks.update(task);
+    tasks.update(task.id, task);
   };
 
-  const handleDelete = async (taskId: number) => {
+  const handleDelete = async (taskId: string) => {
     tasks.delete(taskId);
   };
 
   const handleStatusChange = async (
-    taskId: number,
+    taskId: string,
     newStatus: Task["status"]
   ) => {
     tasks.updateStatus(taskId, newStatus);
