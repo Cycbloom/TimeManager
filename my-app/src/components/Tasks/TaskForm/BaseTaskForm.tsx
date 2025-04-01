@@ -8,7 +8,7 @@ import {
   TagInput,
   EstimateSlider,
 } from "@/components/form-controls";
-import BaseForm from "@/components/forms/BaseForm";
+import { BaseForm } from "@/components/forms";
 
 interface Props {
   onSubmit: SubmitHandler<TaskFormData>;

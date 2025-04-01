@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Task } from "../../types/tasks";
 import GenericList from "../Lists/GenericList";
-import TaskItem from "./TaskItem";
+import TaskItem from "./TaskList/TaskItem";
 import EditTaskDialog from "./TaskForm/EditTaskDialog";
 import TaskFilterBar from "./TaskFilterBar";
 
